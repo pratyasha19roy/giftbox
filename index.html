@@ -3,267 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pink Gift Box Scroll Animation</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <title>Happy Birthday Shawmava</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital@0;1&family=Lora:ital@0;1&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Define box colors */
-            --box-color: #e74c3c;
-            --lid-color: #c0392b;
-            --ribbon-color: #f1c40f;
-            /* Background color */
-            --bg-pink: #ffd1dc;
+            --primary-pink: #fce4ec;
+            --deep-rose: #ad1457;
+            --soft-gold: #d4af37;
+            --text-color: #4a4a4a;
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--bg-pink);
-            font-family: sans-serif;
-            overflow-x: hidden;
-            color: #333; 
-        }
-
-        /* Create scroll space to drive the animation */
-        .scroll-wrapper {
-            height: 400vh; 
-        }
-
-        /* The fixed viewport where animation happens */
-        .viewport {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
+            background-color: var(--primary-pink);
+            font-family: 'Lora', serif;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Hidden text that appears at the end */
-        .background-text {
-            position: absolute;
-            font-size: 8vw;
-            font-weight: bold;
-            opacity: 0;
-            z-index: 1;
-            text-align: center;
-            width: 100%;
-            color: #c0392b;
-        }
-
-        /* Image Container Styling */
-        .image-container {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            z-index: 10;
+        /* --- Envelope Styles --- */
+        .envelope-wrapper {
+            position: relative;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            transition: transform 0.3s ease;
         }
 
-        .image-container img {
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 0 0 5px 5px;
+        }
+
+        .envelope:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-top: 110px solid var(--deep-rose);
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            transform-origin: top;
+            transition: transform 0.5s 0.3s;
+        }
+
+        .envelope:after {
+            content: "Happy Birthday Love";
+            position: absolute;
+            z-index: 3;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 3px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: white;
+            background: var(--deep-rose);
+            clip-path: polygon(0 40%, 50% 100%, 100% 40%, 100% 100%, 0 100%);
+            border-radius: 0 0 5px 5px;
         }
 
-        /* Tooltip/Card Popup Styling */
-        .tooltip {
-            position: absolute;
-            bottom: 115%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: black;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            width: 120px;
-            text-align: center;
+        /* --- Opening Animation --- */
+        .envelope-wrapper.open .envelope:before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .letter-container {
+            transform: translateY(-50%) scale(1);
+            opacity: 1;
+            z-index: 10;
+            visibility: visible;
+        }
+
+        .envelope-wrapper.open .envelope {
+            transform: translateY(200px);
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            font-weight: 600;
         }
-        
-        .tooltip::after {
-            content: '';
+
+        /* --- Letter Styles --- */
+        .letter-container {
             position: absolute;
-            top: 100%;
+            top: 50%;
             left: 50%;
-            margin-left: -8px;
-            border-width: 8px;
-            border-style: solid;
-            border-color: white transparent transparent transparent;
+            transform: translate(-50%, -10%) scale(0.5);
+            width: 90vw;
+            max-width: 900px;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+            border: 1px solid #eee;
         }
 
-        .image-container:hover .tooltip {
-            opacity: 1;
-            bottom: 125%;
+        .photo-sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
         }
 
-        /* Gift Box Container */
-        .gift-box-container {
-            position: absolute;
-            bottom: 50px;
-            width: 200px;
-            height: 150px;
-            z-index: 5;
+        .polaroid {
+            background: white;
+            padding: 10px 10px 25px 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transform: rotate(-3deg);
+            margin-bottom: 20px;
         }
 
-        /* The main body of the box */
-        .box-body {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 120px;
-            background: var(--box-color);
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        .polaroid:last-child {
+            transform: rotate(3deg);
         }
 
-        /* The lid of the box */
-        .box-lid {
-            position: absolute;
-            bottom: 120px;
-            width: 110%;
-            left: -5%;
-            height: 30px;
-            background: var(--lid-color);
-            border-radius: 5px;
-            z-index: 11;
-            transform-origin: bottom left;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .polaroid img {
+            width: 150px;
+            height: 180px;
+            object-fit: cover;
+            border: 1px solid #eee;
         }
 
-        /* The vertical ribbon */
-        .ribbon-v {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 100%;
-            background: var(--ribbon-color);
+        .letter-content {
+            flex: 2;
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 1.05rem;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        .letter-content h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--deep-rose);
+            margin-top: 0;
+        }
+
+        .bengali-text {
+            font-family: 'Lora', serif;
+            font-weight: bold;
+            color: #d81b60;
+            margin: 20px 0;
+            border-top: 1px solid #ffe1e1;
+            padding-top: 15px;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--deep-rose);
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .letter-container {
+                flex-direction: column;
+                padding: 20px;
+                width: 85vw;
+            }
+            .photo-sidebar {
+                flex-direction: row;
+            }
+            .polaroid img {
+                width: 100px;
+                height: 120px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="scroll-wrapper">
-        <div class="viewport">
-            <div class="background-text">HAPPY HOLIDAYS!</div>
-            <div id="gallery"></div>
-            <div class="gift-box-container">
-                <div class="box-lid">
-                    <div class="ribbon-v"></div>
+    <div class="envelope-wrapper" onclick="openLetter()">
+        <div class="envelope"></div>
+        
+        <div class="letter-container" id="letter">
+            <div class="photo-sidebar">
+                <div class="polaroid">
+                    <img src="https://via.placeholder.com/150x180?text=Photo+1" alt="Shawmava 1">
                 </div>
-                <div class="box-body">
-                    <div class="ribbon-v"></div>
+                <div class="polaroid">
+                    <img src="https://via.placeholder.com/150x180?text=Photo+2" alt="Shawmava 2">
+                </div>
+            </div>
+
+            <div class="letter-content">
+                <h2>My beloved Shawmava,</h2>
+                
+                <p>Now I know why you were born in January, because you mark the beginning. Just how after a year’s tiredness, gloom, sufferings are borne with the hope of January. That Jan would bring something new, something different. That is YOU. You are the Start, You are THE fresh beginning that washes away all the darkness of the previous year.</p>
+
+                <p>As if there was nothing before you.</p>
+
+                <p>That is how you are in my life. It has always been you, even before I met you, and there will always be only you.</p>
+
+                <p>Yes, birthdays are gloomy, but before meeting you all my days were like that. I never really looked forward to anything.</p>
+
+                <p>Now everyday, I look forward to your messages, your calls, your voice. And most importantly, a life with you.</p>
+
+                <p>So before you say, <em>‘I don’t do anything for you Pratyasha’</em> - just remember that you have given meaning to each day of my life, you make me want to live. And by ‘live’ I don't mean just breathing and going about my day. ‘Living’ where I love, I fight, I cry, I get angry, I smile like a fool, I rrrrrrebel - I FEEL emotions.</p>
+
+                <p>I hate men, you know that, maybe not the best thing to hear about your gender on your birthday, but I do. Which is why, I never wanted to have a boy child, I always wanted a baby girl. I did not know how to raise a boy to be a good man, because I did not know good men. But seeing you knowing you, I will be over the moon to have and raise a baby boy with you, given that your behavior and face card (uff so hot) are the dominant genes.</p>
+
+                <p>And just like you, I hated to grow old, I was terrified of it, but now I look forward to it. Because I know it will take me closer to the life I envision with you.</p>
+
+                <p>Most things in my life that are hopeful are because of YOU.</p>
+
+                <p>Thank you for being you, thank you for being mine. I am so grateful to this day, when my soulmate was born.</p>
+
+                <p>Happy birthday Love, may Kanha bless every day of yours with all that is good.</p>
+
+                <p class="bengali-text">আজ থেকে আপনি আমার permanantly তুমি, জন্মদিনের অনেক অনেক শুভেচ্ছা প্রিয়, খুব খুব ভালো থেকো আর ভালো রেখো</p>
+
+                <div class="signature">
+                    Yours Forever,<br>
+                    Pratyasha
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        gsap.registerPlugin(ScrollTrigger);
-
-        const gallery = document.getElementById('gallery');
-        
-        // UPDATED: Predefined positions to prevent overlap.
-        // x, y are relative to center (in vw/vh), rot is rotation in degrees.
-        const positions = [
-            { x: -32, y: -38, rot: -12 }, // Top-left
-            { x: -16, y: -25, rot: 6 },   // Top-middle-left
-            { x: 8, y: -35, rot: -8 },    // Top-right
-            { x: 32, y: -28, rot: 10 },   // Far-top-right
-            { x: -28, y: 0, rot: -5 },    // Middle-left
-            { x: 2, y: -12, rot: 3 },     // Center
-            { x: 36, y: 2, rot: -7 },     // Middle-right
-            { x: 4, y: 18, rot: 8 },      // Bottom-center-upper (fixed overlap)
-            { x: -3, y: 34, rot: -4 }     // Bottom-center-lower (fixed overlap)
-        ];
-        
-        const imgCount = positions.length;
-        const box = document.querySelector('.gift-box-container');
-        
-        // --- 1. Generate and Place Images ---
-        for (let i = 0; i < imgCount; i++) {
-            const container = document.createElement('div');
-            container.className = 'image-container';
-            
-            // UPDATED: Use the predefined position instead of a random one
-            const pos = positions[i];
-            container.style.left = `calc(50% + ${pos.x}vw)`;
-            container.style.top = `calc(45% + ${pos.y}vh)`;
-            container.style.transform = `rotate(${pos.rot}deg)`;
-            
-            // Placeholder images
-            container.innerHTML = `
-                <img src="https://picsum.photos/200/200?random=${i+200}" alt="Memory ${i+1}">
-                <div class="tooltip">
-                    <strong>Memory #${i+1}</strong><br>
-                    A wonderful moment captured in time.
-                </div>
-            `;
-            gallery.appendChild(container);
+        function openLetter() {
+            document.querySelector('.envelope-wrapper').classList.add('open');
         }
-
-        // --- 2. Create the GSAP Scroll Animation Timeline ---
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".scroll-wrapper",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1.5,
-            }
-        });
-
-        gsap.set(".box-lid", { y: -150, rotate: -20, opacity: 1 });
-        gsap.set(".background-text", { opacity: 0, scale: 0.8 });
-
-        tl.to(".image-container", {
-            // Dynamic calculation: Find distance from image center to box center
-            x: (i, target) => {
-                const boxRect = box.getBoundingClientRect();
-                const imgRect = target.getBoundingClientRect();
-                return (boxRect.left + boxRect.width/2) - (imgRect.left + imgRect.width/2);
-            },
-            y: (i, target) => {
-                const boxRect = box.getBoundingClientRect();
-                const imgRect = target.getBoundingClientRect();
-                return (boxRect.top + boxRect.height/2) - (imgRect.top + imgRect.height/2);
-            },
-            rotate: 0,
-            scale: 0.1,
-            opacity: 0,
-            duration: 3,
-            stagger: {
-                amount: 1.5,
-                from: "random"
-            },
-            ease: "power2.inOut"
-        })
-        .add("imagesIn")
-        .to(".box-lid", {
-            y: 0,
-            rotate: 0,
-            duration: 1,
-            ease: "bounce.out"
-        }, "imagesIn-=0.5")
-        .to(".background-text", {
-            opacity: 1,
-            scale: 1,
-            duration: 1.5,
-            ease: "back.out(1.7)"
-        });
     </script>
 </body>
 </html>
