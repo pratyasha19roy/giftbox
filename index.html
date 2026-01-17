@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gift Box Scroll Animation</title>
+<title>Gift Box Animation</title>
 
 <style>
     body {
         margin: 0;
         background: #fceff8;
-        font-family: Arial, sans-serif;
-        height: 250vh;
+        height: 250vh; /* enough scroll space */
         overflow-x: hidden;
+        font-family: Arial, sans-serif;
     }
 
     .background-message {
@@ -20,12 +20,11 @@
         left: 50%;
         transform: translate(-50%, -50%);
         font-size: 32px;
-        opacity: 0;
-        transition: 0.8s;
-        color: #d63384;
         font-weight: bold;
+        color: #d63384;
+        opacity: 0;
+        transition: 0.7s;
         pointer-events: none;
-        text-align: center;
     }
 
     .gift-box {
@@ -33,19 +32,18 @@
         bottom: 40px;
         left: 50%;
         transform: translateX(-50%);
-        width: 300px;
-        height: 200px;
+        width: 260px;
+        height: 180px;
         background: #ff9ad1;
         border-radius: 20px;
-        overflow: hidden;
-        transition: 0.6s;
         box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        overflow: hidden;
+        transition: 0.5s;
     }
 
     .lid {
         position: absolute;
         top: -80px;
-        left: 0;
         width: 100%;
         height: 80px;
         background: #ff7cbc;
@@ -61,7 +59,7 @@
         width: 100px;
         position: absolute;
         cursor: pointer;
-        transition: left 0.2s ease-out, top 0.2s ease-out;
+        transition: top 0.2s ease-out, left 0.2s ease-out;
     }
 
     .item:hover::after {
@@ -71,7 +69,7 @@
         left: 0;
         background: white;
         padding: 6px 10px;
-        border-radius: 8px;
+        border-radius: 6px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.25);
         white-space: nowrap;
         font-size: 14px;
@@ -89,14 +87,82 @@
     <div class="lid"></div>
 </div>
 
-<!-- scattered items -->
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 1" style="top:20%; left:10%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 2" style="top:10%; left:40%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 3" style="top:30%; left:70%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 4" style="top:50%; left:20%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 5" style="top:60%; left:60%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 6" style="top:40%; left:80%;">
+<!-- scattered items: replace src + data-info -->
+<img src="https://via.placeholder.com/100" class="item" data-info="Item 1" style="top:20%; left:10%">
+<img src="https://via.placeholder.com/100" class="item" data-info="Item 2" style="top:15%; left:50%">
+<img src="https://via.placeholder.com/100" class="item" data-info="Item 3" style="top:40%; left:75%">
+<img src="https://via.placeholder.com/100" class="item" data-info="Item 4" style="top:55%; left:25%">
+<img src="https://via.placeholder.com/100" class="item" data-info="Item 5" style="top:30%; left:60%">
+<img src="https://via.placeholder.com/100" class="item" data-info="Item 6" style="top:65%; left:35%">
 
 <script>
 const items = document.querySelectorAll(".item");
-const giftBo
+const giftBox = document.getElementById("giftBox");
+const bgMessage = document.getElementById("bgMessage");
+
+let starts = [];
+let boxCenterX, boxCenterY;
+
+// STEP 1 — Calculate box center
+function calculateBoxCenter() {
+    const r = giftBox.getBoundingClientRect();
+    boxCenterX = r.left + r.width / 2;
+    boxCenterY = r.top + window.scrollY + r.height / 2;
+}
+
+// STEP 2 — Store true starting X/Y positions
+function storeItemStartPositions() {
+    starts = [];
+    items.forEach(item => {
+        const r = item.getBoundingClientRect();
+        starts.push({
+            el: item,
+            x: r.left,
+            y: r.top + window.scrollY
+        });
+    });
+}
+
+// STEP 3 — Scroll → linear interpolation
+function animateItems() {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    let t = window.scrollY / maxScroll;
+    t = Math.min(Math.max(t, 0), 1);
+
+    starts.forEach(obj => {
+        const item = obj.el;
+        const startX = obj.x;
+        const startY = obj.y;
+
+        const targetX = boxCenterX - 50; // center item
+        const targetY = boxCenterY - 50;
+
+        const newX = startX + (targetX - startX) * t;
+        const newY = startY + (targetY - startY) * t;
+
+        item.style.left = newX + "px";
+        item.style.top = newY + "px";
+    });
+
+    if (t > 0.9) {
+        giftBox.classList.add("closed");
+        bgMessage.style.opacity = 1;
+    } else {
+        giftBox.classList.remove("closed");
+        bgMessage.style.opacity = 0;
+    }
+}
+
+// STEP 4 — Load → measure → animate
+window.onload = () => {
+    calculateBoxCenter();
+    storeItemStartPositions();
+    animateItems();
+};
+
+window.addEventListener("resize", calculateBoxCenter);
+window.addEventListener("scroll", animateItems);
+</script>
+
+</body>
+</html>
