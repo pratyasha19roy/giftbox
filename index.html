@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gift Box Animation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Box Scroll Animation</title>
 
 <style>
     body {
         margin: 0;
         background: #fceff8;
         font-family: Arial, sans-serif;
-        height: 250vh; /* allow more scroll */
+        height: 250vh;
         overflow-x: hidden;
     }
 
@@ -25,6 +25,7 @@
         color: #d63384;
         font-weight: bold;
         pointer-events: none;
+        text-align: center;
     }
 
     .gift-box {
@@ -59,8 +60,8 @@
     .item {
         width: 100px;
         position: absolute;
-        transition: left 0.4s, top 0.4s;
         cursor: pointer;
+        transition: left 0.2s ease-out, top 0.2s ease-out;
     }
 
     .item:hover::after {
@@ -89,61 +90,13 @@
 </div>
 
 <!-- scattered items -->
-<img src="https://via.placeholder.com/100" class="item" data-info="item 1" style="top:20%; left:10%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="item 2" style="top:10%; left:40%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="item 3" style="top:30%; left:70%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="item 4" style="top:50%; left:20%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="item 5" style="top:60%; left:60%">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 1" style="top:20%; left:10%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 2" style="top:10%; left:40%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 3" style="top:30%; left:70%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 4" style="top:50%; left:20%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 5" style="top:60%; left:60%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 6" style="top:40%; left:80%;">
 
 <script>
 const items = document.querySelectorAll(".item");
-const giftBox = document.getElementById("giftBox");
-const bgMessage = document.getElementById("bgMessage");
-
-/* Get box center Y relative to full page */
-function getBoxCenterY() {
-    const rect = giftBox.getBoundingClientRect();
-    return rect.top + window.scrollY + rect.height / 2;
-}
-
-let boxCenterY = getBoxCenterY();
-window.addEventListener("resize", () => boxCenterY = getBoxCenterY());
-
-/* store original absolute page Y positions */
-items.forEach(item => {
-    const rect = item.getBoundingClientRect();
-    item.dataset.startX = rect.left;
-    item.dataset.startY = rect.top + window.scrollY;
-});
-
-window.addEventListener("scroll", () => {
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    let t = window.scrollY / maxScroll;
-    t = Math.min(Math.max(t, 0), 1);
-
-    items.forEach(item => {
-        const startX = parseFloat(item.dataset.startX);
-        const startY = parseFloat(item.dataset.startY);
-
-        const targetX = window.innerWidth / 2 - 50; // centered
-        const targetY = boxCenterY - 50;  // down towards box
-
-        const newX = startX + (targetX - startX) * t;
-        const newY = startY + (targetY - startY) * t;
-
-        item.style.left = newX + "px";
-        item.style.top = newY + "px";
-    });
-
-    if (t > 0.9) {
-        giftBox.classList.add("closed");
-        bgMessage.style.opacity = 1;
-    } else {
-        giftBox.classList.remove("closed");
-        bgMessage.style.opacity = 0;
-    }
-});
-</script>
-
-</body>
-</html>
+const giftBo
