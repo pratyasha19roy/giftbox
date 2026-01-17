@@ -10,7 +10,7 @@
         margin: 0;
         background: #fceff8;
         font-family: Arial, sans-serif;
-        height: 200vh; /* allows scrolling */
+        height: 250vh; /* allow more scroll */
         overflow-x: hidden;
     }
 
@@ -24,11 +24,9 @@
         transition: 0.8s;
         color: #d63384;
         font-weight: bold;
-        text-align: center;
         pointer-events: none;
     }
 
-    /* Gift box */
     .gift-box {
         position: fixed;
         bottom: 40px;
@@ -58,15 +56,13 @@
         top: 0;
     }
 
-    /* Scattered items */
     .item {
         width: 100px;
         position: absolute;
-        transition: top 0.5s ease-out, left 0.5s ease-out;
+        transition: left 0.4s, top 0.4s;
         cursor: pointer;
     }
 
-    /* Tooltip on hover */
     .item:hover::after {
         content: attr(data-info);
         position: absolute;
@@ -84,82 +80,62 @@
 
 <body>
 
-<!-- ⭐ Background message when box closes -->
 <div class="background-message" id="bgMessage">
-    Your surprise is inside 🎁  
+    Your surprise is inside 🎁
 </div>
 
-<!-- ⭐ Gift box at bottom -->
 <div class="gift-box" id="giftBox">
     <div class="lid"></div>
 </div>
 
-<!-- ⭐ Scattered items (change images + text + positions here) -->
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 1" style="top:20%; left:10%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 2" style="top:10%; left:40%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 3" style="top:30%; left:70%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 4" style="top:50%; left:20%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 5" style="top:60%; left:60%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 6" style="top:35%; left:55%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 7" style="top:65%; left:30%;">
-<img src="https://via.placeholder.com/100" class="item" data-info="Your text 8" style="top:25%; left:80%;">
+<!-- scattered items -->
+<img src="https://via.placeholder.com/100" class="item" data-info="item 1" style="top:20%; left:10%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="item 2" style="top:10%; left:40%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="item 3" style="top:30%; left:70%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="item 4" style="top:50%; left:20%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="item 5" style="top:60%; left:60%">
 
 <script>
 const items = document.querySelectorAll(".item");
 const giftBox = document.getElementById("giftBox");
 const bgMessage = document.getElementById("bgMessage");
 
-/* Calculate box center */
-function getBoxCenter() {
-    const boxRect = giftBox.getBoundingClientRect();
-    return {
-        x: boxRect.left + boxRect.width / 2,
-        y: boxRect.top + boxRect.height / 2
-    };
+/* Get box center Y relative to full page */
+function getBoxCenterY() {
+    const rect = giftBox.getBoundingClientRect();
+    return rect.top + window.scrollY + rect.height / 2;
 }
 
-let boxCenter = getBoxCenter();
+let boxCenterY = getBoxCenterY();
+window.addEventListener("resize", () => boxCenterY = getBoxCenterY());
 
-/* Recalculate if window resizes */
-window.addEventListener("resize", () => {
-    boxCenter = getBoxCenter();
-});
-
-/* Store scattered starting positions */
+/* store original absolute page Y positions */
 items.forEach(item => {
-    item.dataset.startLeft = parseFloat(item.style.left);
-    item.dataset.startTop = parseFloat(item.style.top);
+    const rect = item.getBoundingClientRect();
+    item.dataset.startX = rect.left;
+    item.dataset.startY = rect.top + window.scrollY;
 });
 
-/* Scroll animation */
 window.addEventListener("scroll", () => {
     const maxScroll = document.body.scrollHeight - window.innerHeight;
-    let scrollProgress = window.scrollY / maxScroll;
-
-    scrollProgress = Math.min(Math.max(scrollProgress, 0), 1); // clamp 0–1
+    let t = window.scrollY / maxScroll;
+    t = Math.min(Math.max(t, 0), 1);
 
     items.forEach(item => {
-        const startLeftPercent = parseFloat(item.dataset.startLeft);
-        const startTopPercent = parseFloat(item.dataset.startTop);
+        const startX = parseFloat(item.dataset.startX);
+        const startY = parseFloat(item.dataset.startY);
 
-        /* Convert starting percentages to actual px */
-        const startX = window.innerWidth * (startLeftPercent / 100);
-        const startY = window.innerHeight * (startTopPercent / 100);
+        const targetX = window.innerWidth / 2 - 50; // centered
+        const targetY = boxCenterY - 50;  // down towards box
 
-        /* Target position = center of gift box */
-        const targetX = boxCenter.x - 50;  
-        const targetY = boxCenter.y - 50;
-
-        /* Interpolate from start → box center */
-        const newX = startX + (targetX - startX) * scrollProgress;
-        const newY = startY + (targetY - startY) * scrollProgress;
+        const newX = startX + (targetX - startX) * t;
+        const newY = startY + (targetY - startY) * t;
 
         item.style.left = newX + "px";
         item.style.top = newY + "px";
     });
 
-    /* Close lid + show background text when fully scrolled */
-    if (scrollProgress > 0.9) {
+    if (t > 0.9) {
         giftBox.classList.add("closed");
         bgMessage.style.opacity = 1;
     } else {
