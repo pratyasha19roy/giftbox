@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Shawmava</title>
+    <title>For Shawmava | Happy Birthday</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f8f1f1;
+            --bg-color: #fcf8f8;
             --envelope-burgundy: #7d1a2c;
             --envelope-light: #962136;
             --wax-gold: #d4af37;
-            --ivory-paper: #fffdfa;
-            --accent-rose: #a63d4d;
+            --ivory-paper: #ffffff;
+            --text-main: #2c2c2c;
         }
 
         * { box-sizing: border-box; }
@@ -36,215 +36,158 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1200px;
+            perspective: 1500px;
         }
 
-        /* --- AESTHETIC ENVELOPE --- */
+        /* --- ENVELOPE --- */
         .envelope-wrapper {
             position: relative;
-            width: 600px;
-            height: 400px;
+            width: 550px;
+            height: 380px;
             background: var(--envelope-burgundy);
             border-radius: 4px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
             cursor: pointer;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10;
+            z-index: 50;
+            transition: all 0.8s ease;
         }
 
-        /* Texture Overlay for Envelope */
         .envelope-wrapper::after {
-            content: "";
-            position: absolute;
-            top:0; left:0; width: 100%; height: 100%;
+            content: ""; position: absolute; top:0; left:0; width:100%; height:100%;
             background-image: url("https://www.transparenttextures.com/patterns/felt.png");
-            opacity: 0.2;
-            pointer-events: none;
+            opacity: 0.15; pointer-events: none;
         }
 
-        /* Top Flap */
         .flap {
-            position: absolute;
-            top: 0;
-            width: 0;
-            height: 0;
-            border-top: 220px solid var(--envelope-light);
-            border-left: 300px solid transparent;
-            border-right: 300px solid transparent;
-            transform-origin: top;
-            transition: transform 0.6s ease;
-            z-index: 30;
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+            position: absolute; top: 0; width: 0; height: 0;
+            border-top: 200px solid var(--envelope-light);
+            border-left: 275px solid transparent; border-right: 275px solid transparent;
+            transform-origin: top; transition: transform 0.6s ease; z-index: 60;
         }
 
-        /* Front Pockets of Envelope */
         .pocket {
-            position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-bottom: 220px solid var(--envelope-light);
-            border-left: 300px solid transparent;
-            border-right: 300px solid transparent;
-            z-index: 25;
+            position: absolute; bottom: 0; width: 0; height: 0;
+            border-bottom: 200px solid var(--envelope-light);
+            border-left: 275px solid transparent; border-right: 275px solid transparent;
+            z-index: 55;
         }
 
-        .pocket-sides {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--envelope-burgundy);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 50% 50%);
-            z-index: 20;
-        }
-
-        /* Aesthetic Wax Seal */
         .wax-seal {
-            position: absolute;
-            top: 180px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 90px;
+            position: absolute; top: 170px; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 80px;
             background: radial-gradient(circle at 30% 30%, #f1d382, var(--wax-gold));
-            border-radius: 50% 48% 52% 45% / 48% 52% 45% 50%; /* Organic shape */
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.3);
-            z-index: 40;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Dancing Script', cursive;
-            color: #5a3e12;
-            font-weight: bold;
-            font-size: 1.4rem;
+            border-radius: 50% 45% 52% 48%;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            z-index: 70; display: flex; justify-content: center; align-items: center;
+            font-family: 'Dancing Script', cursive; color: #5a3e12; font-weight: bold;
             transition: opacity 0.4s;
         }
 
         .envelope-label {
-            position: absolute;
-            bottom: 30px;
-            width: 100%;
-            text-align: center;
-            color: var(--wax-gold);
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
-            z-index: 40;
-            letter-spacing: 1px;
+            position: absolute; bottom: 30px; width: 100%; text-align: center;
+            color: var(--wax-gold); font-family: 'Dancing Script', cursive;
+            font-size: 2rem; z-index: 70;
         }
 
         /* --- THE LETTER --- */
         .letter {
             position: absolute;
-            width: 95%;
-            max-width: 1150px;
+            width: 90%;
+            max-width: 1100px;
             height: 85vh;
             background: var(--ivory-paper);
-            background-image: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
             box-shadow: 0 0 50px rgba(0,0,0,0.1);
             display: flex;
-            z-index: 5;
             opacity: 0;
-            transform: translateY(50px) scale(0.9);
+            transform: translateY(20px) scale(0.9);
             transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
             visibility: hidden;
-            border: 1px solid #d1d1d1;
+            z-index: 10;
+            border-radius: 4px;
+            overflow: hidden; /* This keeps the photos inside! */
         }
 
-        /* BIGGER Picture Frames */
+        /* Left Side: Photo Container */
         .photo-sidebar {
-            flex: 0 0 450px; /* Increased Sidebar width */
+            flex: 0 0 42%; /* Size relative to the letter width */
             background: #fdfaf7;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            gap: 40px;
-            padding: 20px;
+            padding: 40px 20px;
+            gap: 30px;
             border-right: 1px solid #eee;
+            overflow-y: auto; /* In case photos are too tall for small screens */
         }
 
         .polaroid-frame {
             background: white;
-            padding: 18px 18px 50px 18px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-            border: 1px solid #f0f0f0;
-            transition: transform 0.4s;
+            padding: 15px 15px 45px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+            width: 90%; /* Responsive to the sidebar width */
+            max-width: 350px;
         }
 
-        .polaroid-frame:nth-child(1) { transform: rotate(-3deg); }
-        .polaroid-frame:nth-child(2) { transform: rotate(4deg); }
+        .polaroid-frame:nth-child(1) { transform: rotate(-2deg); }
+        .polaroid-frame:nth-child(2) { transform: rotate(2deg); }
 
         .polaroid-frame img {
-            width: 320px; /* Big photo size */
-            height: 380px;
+            width: 100%; /* Fits exactly in the frame */
+            height: auto;
+            aspect-ratio: 4/5;
             object-fit: cover;
             display: block;
         }
 
-        /* Letter Text */
+        /* Right Side: Text Content */
         .letter-body {
             flex: 1;
-            padding: 60px 80px;
+            padding: 60px;
             overflow-y: auto;
-            color: #333;
+            color: var(--text-main);
             line-height: 1.8;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
+            background-image: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
         }
 
         .letter-body h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.6rem;
+            font-size: 2.4rem;
             color: var(--envelope-burgundy);
-            margin-bottom: 30px;
+            margin-top: 0;
         }
 
         .bengali-section {
             margin-top: 40px;
-            padding: 25px;
-            background: #fff5f6;
-            border-left: 5px solid var(--envelope-burgundy);
-            font-size: 1.3rem;
+            padding: 20px;
+            background: rgba(125, 26, 44, 0.04);
+            border-left: 4px solid var(--envelope-burgundy);
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--envelope-burgundy);
         }
 
         .signature {
             text-align: right;
             margin-top: 40px;
             font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
+            font-size: 2.8rem;
             color: var(--envelope-burgundy);
         }
 
-        /* --- OPENING LOGIC --- */
-        .scene.open .flap {
-            transform: rotateX(180deg);
-            z-index: 5; /* Moves behind the letter */
-        }
+        /* --- OPENING ACTIONS --- */
+        .scene.open .flap { transform: rotateX(180deg); z-index: 5; }
+        .scene.open .wax-seal { opacity: 0; }
+        .scene.open .envelope-wrapper { transform: translateY(100%) scale(0.6); opacity: 0; }
+        .scene.open .letter { opacity: 1; visibility: visible; transform: translateY(0) scale(1); z-index: 100; }
 
-        .scene.open .wax-seal {
-            opacity: 0;
-        }
-
-        .scene.open .envelope-wrapper {
-            transform: translateY(35%) scale(0.7); /* Envelope sinks to bottom but stays visible */
-            z-index: 1;
-        }
-
-        .scene.open .letter {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-            z-index: 100; /* Letter comes to the very front */
-        }
-
-        /* Responsive Mobile */
-        @media (max-width: 1024px) {
-            .letter { flex-direction: column; overflow-y: auto; height: 95vh; }
-            .photo-sidebar { flex: none; width: 100%; flex-direction: row; height: auto; padding: 20px; }
-            .polaroid-frame img { width: 160px; height: 200px; }
-            .envelope-wrapper { width: 90%; height: 300px; }
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            .letter { flex-direction: column; width: 95%; height: 90vh; }
+            .photo-sidebar { flex: none; width: 100%; flex-direction: row; height: auto; }
+            .polaroid-frame { width: 150px; padding-bottom: 25px; }
+            .letter-body { padding: 30px; }
+            .envelope-wrapper { width: 90%; height: 280px; }
             .flap, .pocket { border-left-width: 45vw; border-right-width: 45vw; }
         }
     </style>
@@ -252,10 +195,9 @@
 <body>
 
     <div class="scene" id="scene">
-        <div class="envelope-wrapper" onclick="openPage()">
+        <div class="envelope-wrapper" onclick="openLetter()">
             <div class="flap"></div>
             <div class="pocket"></div>
-            <div class="pocket-sides"></div>
             <div class="wax-seal">P & S</div>
             <div class="envelope-label">Happy Birthday Love</div>
         </div>
@@ -263,10 +205,10 @@
         <div class="letter">
             <div class="photo-sidebar">
                 <div class="polaroid-frame">
-                    <img src="https://via.placeholder.com/320x380?text=Photo+1" alt="Shawmava">
+                    <img src="https://via.placeholder.com/400x500?text=Insert+Photo+1" alt="Shawmava">
                 </div>
                 <div class="polaroid-frame">
-                    <img src="https://via.placeholder.com/320x380?text=Photo+2" alt="Shawmava">
+                    <img src="https://via.placeholder.com/400x500?text=Insert+Photo+2" alt="Us">
                 </div>
             </div>
 
@@ -308,7 +250,7 @@
     </div>
 
     <script>
-        function openPage() {
+        function openLetter() {
             document.getElementById('scene').classList.add('open');
         }
     </script>
