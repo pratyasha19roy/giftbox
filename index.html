@@ -1,168 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gift Box Animation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Box Scroll Animation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --box-color: #e74c3c;
+            --lid-color: #c0392b;
+            --ribbon-color: #f1c40f;
+        }
 
-<style>
-    body {
-        margin: 0;
-        background: #fceff8;
-        height: 250vh; /* enough scroll space */
-        overflow-x: hidden;
-        font-family: Arial, sans-serif;
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            font-family: sans-serif;
+            overflow-x: hidden;
+            color: white;
+        }
 
-    .background-message {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 32px;
-        font-weight: bold;
-        color: #d63384;
-        opacity: 0;
-        transition: 0.7s;
-        pointer-events: none;
-    }
+        /* Create scroll space */
+        .scroll-wrapper {
+            height: 400vh; 
+        }
 
-    .gift-box {
-        position: fixed;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 260px;
-        height: 180px;
-        background: #ff9ad1;
-        border-radius: 20px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        overflow: hidden;
-        transition: 0.5s;
-    }
+        .viewport {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
 
-    .lid {
-        position: absolute;
-        top: -80px;
-        width: 100%;
-        height: 80px;
-        background: #ff7cbc;
-        border-radius: 20px 20px 0 0;
-        transition: 0.6s;
-    }
+        .background-text {
+            position: absolute;
+            font-size: 8vw;
+            font-weight: bold;
+            opacity: 0;
+            z-index: 1;
+            text-align: center;
+            width: 100%;
+        }
 
-    .gift-box.closed .lid {
-        top: 0;
-    }
+        /* Image Styling */
+        .image-container {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            z-index: 10;
+            cursor: pointer;
+        }
 
-    .item {
-        width: 100px;
-        position: absolute;
-        cursor: pointer;
-        transition: top 0.2s ease-out, left 0.2s ease-out;
-    }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 3px solid white;
+        }
 
-    .item:hover::after {
-        content: attr(data-info);
-        position: absolute;
-        top: -40px;
-        left: 0;
-        background: white;
-        padding: 6px 10px;
-        border-radius: 6px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-        white-space: nowrap;
-        font-size: 14px;
-    }
-</style>
+        /* Tooltip/Card Popup */
+        .tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            width: 100px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .image-container:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Gift Box Styling */
+        .gift-box-container {
+            position: absolute;
+            bottom: 50px;
+            width: 200px;
+            height: 150px;
+            z-index: 5;
+        }
+
+        .box-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background: var(--box-color);
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            overflow: hidden;
+        }
+
+        .box-lid {
+            position: absolute;
+            bottom: 120px;
+            width: 110%;
+            left: -5%;
+            height: 30px;
+            background: var(--lid-color);
+            border-radius: 5px;
+            z-index: 11;
+            transform-origin: bottom left;
+        }
+
+        .ribbon-v {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 100%;
+            background: var(--ribbon-color);
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="background-message" id="bgMessage">
-    Your surprise is inside 🎁
-</div>
+    <div class="scroll-wrapper">
+        <div class="viewport">
+            <div class="background-text">HAPPY HOLIDAYS!</div>
 
-<div class="gift-box" id="giftBox">
-    <div class="lid"></div>
-</div>
+            <div id="gallery"></div>
 
-<!-- scattered items: replace src + data-info -->
-<img src="https://via.placeholder.com/100" class="item" data-info="Item 1" style="top:20%; left:10%">
-<img src="https://via.placeholder.com/100" class="item" data-info="Item 2" style="top:15%; left:50%">
-<img src="https://via.placeholder.com/100" class="item" data-info="Item 3" style="top:40%; left:75%">
-<img src="https://via.placeholder.com/100" class="item" data-info="Item 4" style="top:55%; left:25%">
-<img src="https://via.placeholder.com/100" class="item" data-info="Item 5" style="top:30%; left:60%">
-<img src="https://via.placeholder.com/100" class="item" data-info="Item 6" style="top:65%; left:35%">
+            <div class="gift-box-container">
+                <div class="box-lid">
+                    <div class="ribbon-v"></div>
+                </div>
+                <div class="box-body">
+                    <div class="ribbon-v"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script>
-const items = document.querySelectorAll(".item");
-const giftBox = document.getElementById("giftBox");
-const bgMessage = document.getElementById("bgMessage");
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
 
-let starts = [];
-let boxCenterX, boxCenterY;
+        const gallery = document.getElementById('gallery');
+        const imgCount = 10;
+        const box = document.querySelector('.gift-box-container');
+        
+        // 1. Generate Scattered Images
+        for (let i = 1; i <= imgCount; i++) {
+            const container = document.createElement('div');
+            container.className = 'image-container';
+            
+            // Random scatter coordinates
+            const randomX = Math.random() * 80 - 40; // -40vw to 40vw
+            const randomY = Math.random() * 60 - 30; // -30vh to 30vh
+            
+            container.style.left = `calc(50% + ${randomX}vw)`;
+            container.style.top = `calc(50% + ${randomY}vh)`;
+            
+            container.innerHTML = `
+                <img src="https://picsum.photos/200?random=${i}" alt="Memory">
+                <div class="tooltip">Memory #${i}<br>Hover details here!</div>
+            `;
+            gallery.appendChild(container);
+        }
 
-// STEP 1 — Calculate box center
-function calculateBoxCenter() {
-    const r = giftBox.getBoundingClientRect();
-    boxCenterX = r.left + r.width / 2;
-    boxCenterY = r.top + window.scrollY + r.height / 2;
-}
-
-// STEP 2 — Store true starting X/Y positions
-function storeItemStartPositions() {
-    starts = [];
-    items.forEach(item => {
-        const r = item.getBoundingClientRect();
-        starts.push({
-            el: item,
-            x: r.left,
-            y: r.top + window.scrollY
+        // 2. Create the Animation Timeline
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".scroll-wrapper",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1, // Smoothly ties animation to scroll position
+            }
         });
-    });
-}
 
-// STEP 3 — Scroll → linear interpolation
-function animateItems() {
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    let t = window.scrollY / maxScroll;
-    t = Math.min(Math.max(t, 0), 1);
+        // Set initial lid position (open)
+        gsap.set(".box-lid", { y: -150, rotate: -20, opacity: 1 });
 
-    starts.forEach(obj => {
-        const item = obj.el;
-        const startX = obj.x;
-        const startY = obj.y;
+        // Animation Sequence:
+        tl.to(".image-container", {
+            // Move images to the box center
+            x: (i, target) => {
+                const boxRect = box.getBoundingClientRect();
+                const imgRect = target.getBoundingClientRect();
+                return boxRect.left - imgRect.left + 40;
+            },
+            y: (i, target) => {
+                const boxRect = box.getBoundingClientRect();
+                const imgRect = target.getBoundingClientRect();
+                return boxRect.top - imgRect.top + 20;
+            },
+            scale: 0.2,
+            opacity: 0,
+            duration: 2,
+            stagger: 0.1 // Images fly in one after another
+        })
+        .to(".box-lid", {
+            // Close the lid
+            y: 0,
+            rotate: 0,
+            duration: 1,
+            ease: "bounce.out"
+        }, "-=0.5") // Start lid closing slightly before last image finishes
+        .to(".background-text", {
+            // Reveal text
+            opacity: 1,
+            scale: 1.2,
+            duration: 1
+        });
 
-        const targetX = boxCenterX - 50; // center item
-        const targetY = boxCenterY - 50;
-
-        const newX = startX + (targetX - startX) * t;
-        const newY = startY + (targetY - startY) * t;
-
-        item.style.left = newX + "px";
-        item.style.top = newY + "px";
-    });
-
-    if (t > 0.9) {
-        giftBox.classList.add("closed");
-        bgMessage.style.opacity = 1;
-    } else {
-        giftBox.classList.remove("closed");
-        bgMessage.style.opacity = 0;
-    }
-}
-
-// STEP 4 — Load → measure → animate
-window.onload = () => {
-    calculateBoxCenter();
-    storeItemStartPositions();
-    animateItems();
-};
-
-window.addEventListener("resize", calculateBoxCenter);
-window.addEventListener("scroll", animateItems);
-</script>
-
+    </script>
 </body>
 </html>
