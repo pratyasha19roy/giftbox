@@ -6,6 +6,7 @@
     <title>For Shawmava | Happy Birthday</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
+        /* --- COLOR PALETTE --- */
         :root {
             --bg-color: #fcf8f8;
             --envelope-burgundy: #7d1a2c;
@@ -13,6 +14,7 @@
             --wax-gold: #d4af37;
             --ivory-paper: #ffffff;
             --text-main: #2c2c2c;
+            --sidebar-bg: #fff0f3; /* Soft pink for decoration area */
         }
 
         * { box-sizing: border-box; }
@@ -39,7 +41,7 @@
             perspective: 1500px;
         }
 
-        /* --- ENVELOPE --- */
+        /* --- ENVELOPE STYLES --- */
         .envelope-wrapper {
             position: relative;
             width: 550px;
@@ -52,6 +54,7 @@
             transition: all 0.8s ease;
         }
 
+        /* Adding a felt texture to the envelope */
         .envelope-wrapper::after {
             content: ""; position: absolute; top:0; left:0; width:100%; height:100%;
             background-image: url("https://www.transparenttextures.com/patterns/felt.png");
@@ -89,7 +92,7 @@
             font-size: 2rem; z-index: 70;
         }
 
-        /* --- THE LETTER --- */
+        /* --- THE LETTER CONTAINER --- */
         .letter {
             position: absolute;
             width: 90%;
@@ -99,55 +102,75 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.1);
             display: flex;
             opacity: 0;
+            /* Start slightly down and smaller */
             transform: translateY(20px) scale(0.9);
             transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
             visibility: hidden;
             z-index: 10;
-            border-radius: 4px;
-            overflow: hidden; /* This keeps the photos inside! */
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
         }
 
-        /* Left Side: Photo Container */
-        .photo-sidebar {
-            flex: 0 0 42%; /* Size relative to the letter width */
-            background: #fdfaf7;
+        /* --- LEFT SIDE: DECORATION SIDEBAR --- */
+        .decoration-sidebar {
+            flex: 0 0 35%; /* Takes up 35% of the width */
+            background-color: var(--sidebar-bg);
+            /* Subtle pattern background */
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 40px 20px;
-            gap: 30px;
-            border-right: 1px solid #eee;
-            overflow-y: auto; /* In case photos are too tall for small screens */
+            padding: 30px;
+            border-right: 2px solid #f0e6e8;
+            position: relative;
+            overflow: hidden;
         }
 
-        .polaroid-frame {
-            background: white;
-            padding: 15px 15px 45px 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            border: 1px solid #eee;
-            width: 90%; /* Responsive to the sidebar width */
-            max-width: 350px;
-        }
-
-        .polaroid-frame:nth-child(1) { transform: rotate(-2deg); }
-        .polaroid-frame:nth-child(2) { transform: rotate(2deg); }
-
-        .polaroid-frame img {
-            width: 100%; /* Fits exactly in the frame */
+        /* Styles for the illustration images */
+        .illustration {
+            width: 100%;
+            max-width: 250px;
             height: auto;
-            aspect-ratio: 4/5;
-            object-fit: cover;
-            display: block;
+            object-fit: contain;
+            /* Gives them a soft, sticker-like look */
+            filter: drop-shadow(0 5px 15px rgba(125, 26, 44, 0.15));
+            transition: transform 0.3s ease;
         }
 
-        /* Right Side: Text Content */
+        /* Arranging the illustrations overlapping slightly */
+        .img-cake {
+            z-index: 2;
+            transform: rotate(-5deg) translateY(20px);
+        }
+        
+        .img-balloons {
+            z-index: 1;
+            width: 80%; /* Slightly smaller */
+            transform: rotate(5deg) translate(50px, -30px);
+            opacity: 0.9;
+        }
+
+        .img-gifts {
+            z-index: 3;
+            transform: rotate(2deg) translateY(-40px);
+        }
+
+        /* Hover effect for illustrations */
+        .decoration-sidebar:hover .illustration {
+             transform: scale(1.05) rotate(0deg);
+        }
+
+        /* --- RIGHT SIDE: LETTER TEXT --- */
         .letter-body {
-            flex: 1;
-            padding: 60px;
-            overflow-y: auto;
+            flex: 1; /* Takes remaining space */
+            padding: 60px 70px;
+            overflow-y: auto; /* Scrollable if text is long */
             color: var(--text-main);
             line-height: 1.8;
             font-size: 1.1rem;
+            /* Handmade paper texture for the text area */
             background-image: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
         }
 
@@ -156,39 +179,56 @@
             font-size: 2.4rem;
             color: var(--envelope-burgundy);
             margin-top: 0;
+            margin-bottom: 30px;
         }
 
+        /* Styling the Bengali text section */
         .bengali-section {
             margin-top: 40px;
-            padding: 20px;
-            background: rgba(125, 26, 44, 0.04);
+            padding: 25px;
+            background: rgba(125, 26, 44, 0.05); /* Very light burgundy tint */
             border-left: 4px solid var(--envelope-burgundy);
             font-size: 1.25rem;
             font-weight: 600;
+            border-radius: 0 10px 10px 0;
         }
 
         .signature {
             text-align: right;
-            margin-top: 40px;
+            margin-top: 50px;
             font-family: 'Dancing Script', cursive;
             font-size: 2.8rem;
             color: var(--envelope-burgundy);
         }
 
-        /* --- OPENING ACTIONS --- */
+        /* --- ANIMATION STATES (When clicked) --- */
         .scene.open .flap { transform: rotateX(180deg); z-index: 5; }
-        .scene.open .wax-seal { opacity: 0; }
-        .scene.open .envelope-wrapper { transform: translateY(100%) scale(0.6); opacity: 0; }
+        .scene.open .wax-seal, .scene.open .envelope-label { opacity: 0; pointer-events: none; }
+        /* Envelope slides down and fades out */
+        .scene.open .envelope-wrapper { transform: translateY(100%) scale(0.6); opacity: 0; pointer-events: none; }
+        /* Letter pops up and becomes fully visible */
         .scene.open .letter { opacity: 1; visibility: visible; transform: translateY(0) scale(1); z-index: 100; }
 
-        /* Mobile Adjustments */
+        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 900px) {
             .letter { flex-direction: column; width: 95%; height: 90vh; }
-            .photo-sidebar { flex: none; width: 100%; flex-direction: row; height: auto; }
-            .polaroid-frame { width: 150px; padding-bottom: 25px; }
-            .letter-body { padding: 30px; }
+            /* On mobile, decorations go on top, arranged horizontally */
+            .decoration-sidebar { 
+                flex: none; 
+                width: 100%; 
+                height: 180px; 
+                flex-direction: row; 
+                padding: 10px;
+                border-right: none;
+                border-bottom: 2px solid #f0e6e8;
+            }
+            .illustration { max-width: 100px; max-height: 150px; transform: none !important; margin: 0 10px; }
+            .img-balloons { transform: translate(0,0); }
+            
+            .letter-body { padding: 30px 40px; }
             .envelope-wrapper { width: 90%; height: 280px; }
             .flap, .pocket { border-left-width: 45vw; border-right-width: 45vw; }
+            .letter-body h2 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -203,13 +243,10 @@
         </div>
 
         <div class="letter">
-            <div class="photo-sidebar">
-                <div class="polaroid-frame">
-                    <img src="https://via.placeholder.com/400x500?text=Insert+Photo+1" alt="Shawmava">
-                </div>
-                <div class="polaroid-frame">
-                    <img src="https://via.placeholder.com/400x500?text=Insert+Photo+2" alt="Us">
-                </div>
+            <div class="decoration-sidebar">
+                <img src="https://cdn.pixabay.com/photo/2020/06/09/16/16/balloons-5279497_1280.png" alt="Balloons" class="illustration img-balloons">
+                <img src="https://cdn.pixabay.com/photo/2022/02/21/07/27/watercolor-7025913_1280.png" alt="Birthday Cake" class="illustration img-cake">
+                <img src="https://cdn.pixabay.com/photo/2021/09/07/16/13/flowers-6604395_1280.png" alt="Flowers and Gifts" class="illustration img-gifts">
             </div>
 
             <div class="letter-body">
