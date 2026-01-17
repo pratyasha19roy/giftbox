@@ -12,18 +12,16 @@
             --box-color: #e74c3c;
             --lid-color: #c0392b;
             --ribbon-color: #f1c40f;
-            /* New background color variable */
+            /* Background color */
             --bg-pink: #ffd1dc;
         }
 
         body {
             margin: 0;
             padding: 0;
-            /* UPDATED: Background set to pink */
             background-color: var(--bg-pink);
             font-family: sans-serif;
             overflow-x: hidden;
-            /* UPDATED: Text color set to dark so it is readable on pink */
             color: #333; 
         }
 
@@ -53,7 +51,7 @@
             z-index: 1;
             text-align: center;
             width: 100%;
-            color: #c0392b; /* Matches the gift box red */
+            color: #c0392b;
         }
 
         /* Image Container Styling */
@@ -63,7 +61,6 @@
             height: 120px;
             z-index: 10;
             cursor: pointer;
-            /* Add a subtle shadow so they pop off the pink background */
             box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
         }
 
@@ -95,7 +92,6 @@
             font-weight: 600;
         }
         
-        /* Add a little arrow to the tooltip bottom */
         .tooltip::after {
             content: '';
             position: absolute;
@@ -107,10 +103,9 @@
             border-color: white transparent transparent transparent;
         }
 
-        /* Show tooltip on hover */
         .image-container:hover .tooltip {
             opacity: 1;
-            bottom: 125%; /* Subtle lift effect on hover */
+            bottom: 125%;
         }
 
         /* Gift Box Container */
@@ -144,7 +139,7 @@
             height: 30px;
             background: var(--lid-color);
             border-radius: 5px;
-            z-index: 11; /* Higher Z-index to cover images */
+            z-index: 11;
             transform-origin: bottom left;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
@@ -165,9 +160,7 @@
     <div class="scroll-wrapper">
         <div class="viewport">
             <div class="background-text">HAPPY HOLIDAYS!</div>
-
             <div id="gallery"></div>
-
             <div class="gift-box-container">
                 <div class="box-lid">
                     <div class="ribbon-v"></div>
@@ -180,33 +173,43 @@
     </div>
 
     <script>
-        // Register GSAP plugins
         gsap.registerPlugin(ScrollTrigger);
 
         const gallery = document.getElementById('gallery');
-        const imgCount = 9; // Between 8-10 as requested
+        
+        // UPDATED: Predefined positions to prevent overlap.
+        // x, y are relative to center (in vw/vh), rot is rotation in degrees.
+        const positions = [
+            { x: -32, y: -38, rot: -12 }, // Top-left
+            { x: -16, y: -25, rot: 6 },   // Top-middle-left
+            { x: 8, y: -35, rot: -8 },    // Top-right
+            { x: 32, y: -28, rot: 10 },   // Far-top-right
+            { x: -28, y: 0, rot: -5 },    // Middle-left
+            { x: 2, y: -12, rot: 3 },     // Center
+            { x: 36, y: 2, rot: -7 },     // Middle-right
+            { x: 4, y: 18, rot: 8 },      // Bottom-center-upper (fixed overlap)
+            { x: -3, y: 34, rot: -4 }     // Bottom-center-lower (fixed overlap)
+        ];
+        
+        const imgCount = positions.length;
         const box = document.querySelector('.gift-box-container');
         
-        // --- 1. Generate and Scatter Images ---
-        for (let i = 1; i <= imgCount; i++) {
+        // --- 1. Generate and Place Images ---
+        for (let i = 0; i < imgCount; i++) {
             const container = document.createElement('div');
             container.className = 'image-container';
             
-            // Generate random scatter coordinates within viewport limits
-            // Using slightly tighter bounds so they don't go off-screen too easily
-            const randomX = Math.random() * 70 - 35; // -35vw to 35vw
-            const randomY = Math.random() * 60 - 35; // -35vh to 25vh
-            const randomRot = Math.random() * 30 - 15; // slight random tilt
+            // UPDATED: Use the predefined position instead of a random one
+            const pos = positions[i];
+            container.style.left = `calc(50% + ${pos.x}vw)`;
+            container.style.top = `calc(45% + ${pos.y}vh)`;
+            container.style.transform = `rotate(${pos.rot}deg)`;
             
-            container.style.left = `calc(50% + ${randomX}vw)`;
-            container.style.top = `calc(45% + ${randomY}vh)`;
-            container.style.transform = `rotate(${randomRot}deg)`;
-            
-            // Using picsum for placeholder images. Replace src with your own.
+            // Placeholder images
             container.innerHTML = `
-                <img src="https://picsum.photos/200/200?random=${i}" alt="Memory ${i}">
+                <img src="https://picsum.photos/200/200?random=${i+200}" alt="Memory ${i+1}">
                 <div class="tooltip">
-                    <strong>Memory #${i}</strong><br>
+                    <strong>Memory #${i+1}</strong><br>
                     A wonderful moment captured in time.
                 </div>
             `;
@@ -216,61 +219,51 @@
         // --- 2. Create the GSAP Scroll Animation Timeline ---
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: ".scroll-wrapper", // The element that defines the scroll length
-                start: "top top",          // Start animation when wrapper hits top of viewport
-                end: "bottom bottom",      // End animation when wrapper hits bottom
-                scrub: 1.5,                // Smooth scrubbing effect (higher number = smoother lag)
+                trigger: ".scroll-wrapper",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.5,
             }
         });
 
-        // Initial setup: Lid is floating open, text is hidden
         gsap.set(".box-lid", { y: -150, rotate: -20, opacity: 1 });
         gsap.set(".background-text", { opacity: 0, scale: 0.8 });
 
-        // The Animation Sequence
         tl.to(".image-container", {
             // Dynamic calculation: Find distance from image center to box center
             x: (i, target) => {
                 const boxRect = box.getBoundingClientRect();
                 const imgRect = target.getBoundingClientRect();
-                // Adjusting +40 to aim for center of box width
                 return (boxRect.left + boxRect.width/2) - (imgRect.left + imgRect.width/2);
             },
             y: (i, target) => {
                 const boxRect = box.getBoundingClientRect();
                 const imgRect = target.getBoundingClientRect();
-                // Adjusting +50 to aim for center of box height
                 return (boxRect.top + boxRect.height/2) - (imgRect.top + imgRect.height/2);
             },
-            rotate: 0,   // straighten images as they enter
-            scale: 0.1,  // shrink down
-            opacity: 0,  // fade out
-            duration: 3, // length of the flight path relative to scroll distance
+            rotate: 0,
+            scale: 0.1,
+            opacity: 0,
+            duration: 3,
             stagger: {
-                amount: 1.5, // Total time to stagger all elements across
-                from: "random" // Images fly in randomly, not just first to last
+                amount: 1.5,
+                from: "random"
             },
             ease: "power2.inOut"
         })
-        // Add label to mark when images are mostly in
         .add("imagesIn")
-        
-        // Close the lid
         .to(".box-lid", {
             y: 0,
             rotate: 0,
             duration: 1,
             ease: "bounce.out"
-        }, "imagesIn-=0.5") // Start closing slightly before the very last image finishes
-        
-        // Reveal background text
+        }, "imagesIn-=0.5")
         .to(".background-text", {
             opacity: 1,
             scale: 1,
             duration: 1.5,
             ease: "back.out(1.7)"
         });
-
     </script>
 </body>
 </html>
