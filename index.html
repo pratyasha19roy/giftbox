@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Shawmava</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital@0;1&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital@0;1&family=Lora:ital@0;1&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-bg: #fdf5f7;
-            --envelope-color: #d8434e;
-            --envelope-dark: #b71c1c;
-            --paper-color: #ffffff;
-            --text-main: #333333;
-            --accent: #ad1457;
+            /* Romantic Palette */
+            --primary-bg: #faf3f5; /* Very soft pink background */
+            --envelope-color: #8a1c33; /* Rich Velvet Burgundy */
+            --envelope-dark: #5c0e1f; /* Darker shade for depth */
+            --wax-gold: #e6c170; /* Rich gold */
+            --paper-color: #fffff8; /* Off-white ivory paper */
+            --text-main: #444444; /* Soft black text */
+            --accent: #8a1c33; /* Matching the envelope */
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--primary-bg);
+            background: radial-gradient(circle at center, var(--primary-bg) 0%, #ede0e4 100%);
             font-family: 'Lora', serif;
             display: flex;
             justify-content: center;
@@ -27,7 +29,7 @@
             overflow: hidden;
         }
 
-        /* --- ENVELOPE STYLES --- */
+        /* --- AESTHETIC ENVELOPE STYLES --- */
         .container {
             position: relative;
             display: flex;
@@ -35,80 +37,101 @@
             align-items: center;
             width: 100%;
             height: 100%;
+            perspective: 1500px;
         }
 
         .envelope-wrapper {
             position: relative;
-            width: 550px; /* Bigger width */
-            height: 380px; /* Bigger height */
+            width: 550px;
+            height: 380px;
             background-color: var(--envelope-dark);
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             cursor: pointer;
-            transition: transform 0.5s ease;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            z-index: 20;
         }
 
         .envelope-wrapper:hover {
-            transform: translateY(-10px);
+            transform: translateY(-5px) scale(1.02);
         }
 
-        /* The Flap */
+        /* The Flap (Top Triangle) */
         .envelope-wrapper::before {
             content: "";
             position: absolute;
             top: 0;
-            z-index: 5;
-            border-top: 200px solid var(--envelope-color); /* Adjusted for size */
+            z-index: 25;
+            border-top: 200px solid var(--envelope-color);
             border-left: 275px solid transparent;
             border-right: 275px solid transparent;
             transform-origin: top;
-            transition: transform 0.6s 0.4s ease;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
         }
 
-        /* The Pocket Sides */
-        .envelope-wrapper::after {
-            content: "";
+        /* The Bottom Pockets */
+        .envelope-body {
             position: absolute;
             bottom: 0;
-            width: 0;
-            height: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 24;
             border-bottom: 190px solid var(--envelope-color);
             border-left: 275px solid transparent;
             border-right: 275px solid transparent;
-            z-index: 4;
+            filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.1));
+            pointer-events: none;
+        }
+        
+        /* Aesthetic Ribbon Line */
+        .ribbon {
+            position: absolute;
+            top: 55%;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            background: linear-gradient(to right, transparent, var(--wax-gold) 15%, #fff2ce 50%, var(--wax-gold) 85%, transparent);
+            opacity: 0.4;
+            z-index: 23;
         }
 
-        /* Wax Seal */
+        /* Aesthetic Wax Seal */
         .seal {
             position: absolute;
             top: 170px;
             left: 50%;
             transform: translateX(-50%);
-            width: 70px;
-            height: 70px;
-            background: radial-gradient(circle, #ffca28 0%, #d4af37 100%);
-            border-radius: 50%;
-            z-index: 6;
+            width: 85px;
+            height: 85px;
+            /* Irregular shape for realistic wax look */
+            border-radius: 50% 45% 55% 40% / 45% 55% 40% 55%;
+            background: radial-gradient(ellipse at center, var(--wax-gold) 0%, #c99c33 100%);
+            border: 3px solid #b38b2d;
+            z-index: 30;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            /* Deep shadows for embossed look */
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.4), inset 0 -2px 5px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.3);
             font-family: 'Dancing Script', cursive;
             color: #5d4037;
-            font-weight: bold;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.2);
             transition: opacity 0.3s 0.2s;
         }
 
         .envelope-text {
             position: absolute;
-            bottom: 20px;
+            bottom: 25px;
             width: 100%;
             text-align: center;
-            color: white;
+            color: var(--wax-gold);
             font-family: 'Dancing Script', cursive;
-            font-size: 2rem;
-            z-index: 7;
+            font-size: 2.2rem;
+            z-index: 30;
+            text-shadow: 0 2px 3px rgba(0,0,0,0.3);
         }
 
         /* --- LETTER STYLES --- */
@@ -116,173 +139,105 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 90%;
-            max-width: 1100px;
-            height: 85vh;
+            /* Start small and hidden behind envelope */
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 92%;
+            max-width: 1200px;
+            height: 88vh;
             background: var(--paper-color);
+            /* Subtle paper texture */
+            background-image: linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url("https://www.transparenttextures.com/patterns/cream-paper.png");
             display: flex;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
             opacity: 0;
             visibility: hidden;
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1); /* Pop open effect */
             z-index: 10;
             border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        /* Centering the two columns */
+        /* BIGGER Photo Column */
         .photo-column {
-            flex: 0 0 300px; /* Fixed width for photos */
-            background: #fdfdfd;
+            flex: 0 0 400px; /* Increased width from 300px */
+            background: #f8f8f2;
             border-right: 1px solid #eee;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            gap: 30px;
+            padding: 30px;
+            gap: 40px;
+            box-shadow: inset -5px 0 20px rgba(0,0,0,0.02);
         }
 
         .text-column {
-            flex: 1; /* Takes up the remaining space */
-            padding: 60px;
+            flex: 1;
+            padding: 60px 80px;
             overflow-y: auto;
-            background: #fff;
         }
 
+        /* BIGGER Polaroids */
         .polaroid {
             background: white;
-            padding: 12px 12px 35px 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transform: rotate(-2deg);
-            border: 1px solid #ddd;
+            padding: 15px 15px 40px 15px; /* More padding for bigger frame */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: rotate(-3deg);
+            border: 1px solid #e8e8e8;
+            transition: transform 0.3s;
         }
-
-        .polaroid:nth-child(2) { transform: rotate(3deg); }
+        .polaroid:hover { transform: rotate(0deg) scale(1.02); }
+        .polaroid:nth-child(2) { transform: rotate(4deg); }
+        .polaroid:nth-child(2):hover { transform: rotate(0deg) scale(1.02); }
 
         .polaroid img {
-            width: 200px;
-            height: 240px;
+            width: 260px; /* Much bigger width */
+            height: 320px; /* Much bigger height */
             object-fit: cover;
+            filter: sepia(10%); /* Slight vintage warmth */
         }
 
         .letter-text {
             color: var(--text-main);
-            line-height: 1.8;
-            font-size: 1.1rem;
+            line-height: 1.9;
+            font-size: 1.15rem;
         }
 
-        h2 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 2.2rem; }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(138, 28, 51, 0.1);
+            padding-bottom: 15px;
+            display: inline-block;
+        }
 
         .bengali {
-            font-size: 1.2rem;
+            font-family: 'Lora', serif;
+            font-size: 1.3rem;
             color: var(--accent);
             font-weight: bold;
-            border-top: 2px solid var(--primary-bg);
-            padding-top: 20px;
-            margin-top: 30px;
+            background: rgba(138, 28, 51, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 40px;
+            border-left: 4px solid var(--accent);
         }
 
         .sig {
             text-align: right;
             font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: var(--accent);
-            margin-top: 30px;
+            margin-top: 40px;
         }
 
-        /* --- OPEN STATE --- */
+        /* --- OPEN STATE ANIMATIONS --- */
         .open .envelope-wrapper::before {
-            transform: rotateX(180deg);
-            z-index: 0;
+            transform: rotateX(180deg); /* Flap opens */
+            z-index: 1;
         }
 
-        .open .seal {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .open .letter-container {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .open .envelope-wrapper {
-            transform: translateY(500px); /* Move it out of the way */
-            opacity: 0;
-        }
-
-        /* Mobile specific */
-        @media (max-width: 900px) {
-            .letter-container { flex-direction: column; overflow-y: auto; }
-            .photo-column { flex: none; flex-direction: row; gap: 10px; width: 100%; }
-            .polaroid img { width: 120px; height: 140px; }
-            .envelope-wrapper { width: 90%; height: 250px; }
-            .envelope-wrapper::before { border-left-width: 45vw; border-right-width: 45vw; border-top-width: 150px; }
-            .envelope-wrapper::after { border-left-width: 45vw; border-right-width: 45vw; border-bottom-width: 150px; }
-            .text-column { padding: 30px; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container" id="mainContainer">
-        <div class="envelope-wrapper" onclick="openEnvelope()">
-            <div class="seal">Love</div>
-            <div class="envelope-text">Happy Birthday Love</div>
-        </div>
-
-        <div class="letter-container">
-            <div class="photo-column">
-                <div class="polaroid">
-                    <img src="https://via.placeholder.com/200x240?text=Photo+1" alt="Placeholder">
-                </div>
-                <div class="polaroid">
-                    <img src="https://via.placeholder.com/200x240?text=Photo+2" alt="Placeholder">
-                </div>
-            </div>
-
-            <div class="text-column">
-                <h2>My beloved Shawmava,</h2>
-                <div class="letter-text">
-                    <p>Now I know why you were born in January, because you mark the beginning. Just how after a year’s tiredness, gloom, sufferings are borne with the hope of January. That Jan would bring something new, something different. That is YOU. You are the Start, You are THE fresh beginning that washes away all the darkness of the previous year.</p>
-
-                    <p>As if there was nothing before you.</p>
-
-                    <p>That is how you are in my life. It has always been you, even before I met you, and there will always be only you.</p>
-
-                    <p>Yes, birthdays are gloomy, but before meeting you all my days were like that. I never really looked forward to anything.</p>
-
-                    <p>Now everyday, I look forward to your messages, your calls, your voice. And most importantly, a life with you.</p>
-
-                    <p>So before you say, ‘I don’t do anything for you Pratyasha’ - just remember that you have given meaning to each day of my life, you make me want to live. And by ‘live’ I don't mean just breathing and going about my day. ‘Living’ where I love, I fight, I cry, I get angry, I smile like a fool, I rrrrrrebel - I FEEL emotions.</p>
-
-                    <p>I hate men, you know that, maybe not the best thing to hear about your gender on your birthday, but I do. Which is why, I never wanted to have a boy child, I always wanted a baby girl. I did not know how to raise a boy to be a good man, because I did not know good men. But seeing you knowing you, I will be over the moon to have and raise a baby boy with you, given that your behavior and face card (uff so hot) are the dominant genes.</p>
-
-                    <p>And just like you, I hated to grow old, I was terrified of it, but now I look forward to it. Because I know it will take me closer to the life I envision with you.</p>
-
-                    <p>Most things in my life that are hopeful are because of YOU.</p>
-
-                    <p>Thank you for being you, thank you for being mine. I am so grateful to this day, when my soulmate was born.</p>
-
-                    <p>Happy birthday Love, may Kanha bless every day of yours with all that is good.</p>
-
-                    <p class="bengali">আজ থেকে আপনি আমার permanantly তুমি, জন্মদিনের অনেক অনেক শুভেচ্ছা প্রিয়, খুব খুব ভালো থেকো আর ভালো রেখো</p>
-
-                    <div class="sig">
-                        Yours Forever,<br>
-                        Pratyasha
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function openEnvelope() {
-            document.getElementById('mainContainer').classList.add('open');
-        }
-    </script>
-</body>
-</html>
+        .open .seal, .
