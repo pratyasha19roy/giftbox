@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gift Box Scroll Animation</title>
+<title>Gift Box Animation</title>
 
 <style>
     body {
         margin: 0;
         background: #fceff8;
         font-family: Arial, sans-serif;
-        height: 200vh;
+        height: 200vh; /* allows scrolling */
+        overflow-x: hidden;
     }
 
     .background-message {
@@ -21,12 +22,13 @@
         font-size: 32px;
         opacity: 0;
         transition: 0.8s;
-        pointer-events: none;
         color: #d63384;
         font-weight: bold;
         text-align: center;
+        pointer-events: none;
     }
 
+    /* Gift box */
     .gift-box {
         position: fixed;
         bottom: 40px;
@@ -56,13 +58,15 @@
         top: 0;
     }
 
+    /* Scattered items */
     .item {
         width: 100px;
         position: absolute;
-        transition: all 1s ease-out;
+        transition: top 0.5s ease-out, left 0.5s ease-out;
         cursor: pointer;
     }
 
+    /* Tooltip on hover */
     .item:hover::after {
         content: attr(data-info);
         position: absolute;
@@ -80,60 +84,82 @@
 
 <body>
 
-<!-- ⭐ Change this message -->
+<!-- ⭐ Background message when box closes -->
 <div class="background-message" id="bgMessage">
     Your surprise is inside 🎁  
-    <!-- replace with your message -->
 </div>
 
+<!-- ⭐ Gift box at bottom -->
 <div class="gift-box" id="giftBox">
     <div class="lid"></div>
 </div>
 
-<!-- ⭐ SCATTERED ITEMS — CHANGE IMAGE + TEXT + POSITION  -->
-<!-- Example: Replace src="images/yourimage1.png" with your own -->
-<img src="images/image1.png" class="item" data-info="Your text for item 1" style="top:20%; left:10%;">
-<img src="images/image2.png" class="item" data-info="Your text for item 2" style="top:10%; left:40%;">
-<img src="images/image3.png" class="item" data-info="Your text for item 3" style="top:30%; left:70%;">
-<img src="images/image4.png" class="item" data-info="Your text for item 4" style="top:50%; left:20%;">
-<img src="images/image5.png" class="item" data-info="Your text for item 5" style="top:60%; left:60%;">
-<img src="images/image6.png" class="item" data-info="Your text for item 6" style="top:35%; left:55%;">
-<img src="images/image7.png" class="item" data-info="Your text for item 7" style="top:65%; left:30%;">
-<img src="images/image8.png" class="item" data-info="Your text for item 8" style="top:25%; left:80%;">
+<!-- ⭐ Scattered items (change images + text + positions here) -->
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 1" style="top:20%; left:10%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 2" style="top:10%; left:40%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 3" style="top:30%; left:70%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 4" style="top:50%; left:20%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 5" style="top:60%; left:60%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 6" style="top:35%; left:55%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 7" style="top:65%; left:30%;">
+<img src="https://via.placeholder.com/100" class="item" data-info="Your text 8" style="top:25%; left:80%;">
 
 <script>
 const items = document.querySelectorAll(".item");
 const giftBox = document.getElementById("giftBox");
 const bgMessage = document.getElementById("bgMessage");
 
-// Gift box center coordinates
-const boxRect = giftBox.getBoundingClientRect();
-const boxX = boxRect.left + boxRect.width / 2;
-const boxY = boxRect.top + boxRect.height / 2;
+/* Calculate box center */
+function getBoxCenter() {
+    const boxRect = giftBox.getBoundingClientRect();
+    return {
+        x: boxRect.left + boxRect.width / 2,
+        y: boxRect.top + boxRect.height / 2
+    };
+}
 
+let boxCenter = getBoxCenter();
+
+/* Recalculate if window resizes */
+window.addEventListener("resize", () => {
+    boxCenter = getBoxCenter();
+});
+
+/* Store scattered starting positions */
+items.forEach(item => {
+    item.dataset.startLeft = parseFloat(item.style.left);
+    item.dataset.startTop = parseFloat(item.style.top);
+});
+
+/* Scroll animation */
 window.addEventListener("scroll", () => {
-    const scrollProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    let scrollProgress = window.scrollY / maxScroll;
+
+    scrollProgress = Math.min(Math.max(scrollProgress, 0), 1); // clamp 0–1
 
     items.forEach(item => {
-        const originalTop = item.dataset.originalTop || item.style.top;
-        const originalLeft = item.dataset.originalLeft || item.style.left;
+        const startLeftPercent = parseFloat(item.dataset.startLeft);
+        const startTopPercent = parseFloat(item.dataset.startTop);
 
-        if (!item.dataset.originalTop) {
-            item.dataset.originalTop = originalTop;
-            item.dataset.originalLeft = originalLeft;
-        }
+        /* Convert starting percentages to actual px */
+        const startX = window.innerWidth * (startLeftPercent / 100);
+        const startY = window.innerHeight * (startTopPercent / 100);
 
-        const startX = window.innerWidth * (parseFloat(originalLeft) / 100);
-        const startY = window.innerHeight * (parseFloat(originalTop) / 100);
+        /* Target position = center of gift box */
+        const targetX = boxCenter.x - 50;  
+        const targetY = boxCenter.y - 50;
 
-        const newX = startX + (boxX - startX) * scrollProgress;
-        const newY = startY + (boxY - startY) * scrollProgress;
+        /* Interpolate from start → box center */
+        const newX = startX + (targetX - startX) * scrollProgress;
+        const newY = startY + (targetY - startY) * scrollProgress;
 
         item.style.left = newX + "px";
         item.style.top = newY + "px";
     });
 
-    if (scrollProgress > 0.90) {
+    /* Close lid + show background text when fully scrolled */
+    if (scrollProgress > 0.9) {
         giftBox.classList.add("closed");
         bgMessage.style.opacity = 1;
     } else {
