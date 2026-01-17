@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Shawmava</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital@0;1&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+    <title>Happy Birthday Shawmava</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Romantic Palette */
-            --primary-bg: #faf3f5; /* Very soft pink background */
-            --envelope-color: #8a1c33; /* Rich Velvet Burgundy */
-            --envelope-dark: #5c0e1f; /* Darker shade for depth */
-            --wax-gold: #e6c170; /* Rich gold */
-            --paper-color: #fffff8; /* Off-white ivory paper */
-            --text-main: #444444; /* Soft black text */
-            --accent: #8a1c33; /* Matching the envelope */
+            --bg-color: #f8f1f1;
+            --envelope-burgundy: #7d1a2c;
+            --envelope-light: #962136;
+            --wax-gold: #d4af37;
+            --ivory-paper: #fffdfa;
+            --accent-rose: #a63d4d;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle at center, var(--primary-bg) 0%, #ede0e4 100%);
+            background-color: var(--bg-color);
             font-family: 'Lora', serif;
             display: flex;
             justify-content: center;
@@ -29,215 +29,288 @@
             overflow: hidden;
         }
 
-        /* --- AESTHETIC ENVELOPE STYLES --- */
-        .container {
+        .scene {
             position: relative;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 100%;
-            perspective: 1500px;
+            perspective: 1200px;
         }
 
+        /* --- AESTHETIC ENVELOPE --- */
         .envelope-wrapper {
             position: relative;
-            width: 550px;
-            height: 380px;
-            background-color: var(--envelope-dark);
-            border-radius: 5px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 600px;
+            height: 400px;
+            background: var(--envelope-burgundy);
+            border-radius: 4px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
             cursor: pointer;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            z-index: 20;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
         }
 
-        .envelope-wrapper:hover {
-            transform: translateY(-5px) scale(1.02);
-        }
-
-        /* The Flap (Top Triangle) */
-        .envelope-wrapper::before {
+        /* Texture Overlay for Envelope */
+        .envelope-wrapper::after {
             content: "";
             position: absolute;
-            top: 0;
-            z-index: 25;
-            border-top: 200px solid var(--envelope-color);
-            border-left: 275px solid transparent;
-            border-right: 275px solid transparent;
-            transform-origin: top;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+            top:0; left:0; width: 100%; height: 100%;
+            background-image: url("https://www.transparenttextures.com/patterns/felt.png");
+            opacity: 0.2;
+            pointer-events: none;
         }
 
-        /* The Bottom Pockets */
-        .envelope-body {
+        /* Top Flap */
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-top: 220px solid var(--envelope-light);
+            border-left: 300px solid transparent;
+            border-right: 300px solid transparent;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 30;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+        }
+
+        /* Front Pockets of Envelope */
+        .pocket {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-bottom: 220px solid var(--envelope-light);
+            border-left: 300px solid transparent;
+            border-right: 300px solid transparent;
+            z-index: 25;
+        }
+
+        .pocket-sides {
             position: absolute;
             bottom: 0;
             width: 100%;
             height: 100%;
-            z-index: 24;
-            border-bottom: 190px solid var(--envelope-color);
-            border-left: 275px solid transparent;
-            border-right: 275px solid transparent;
-            filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.1));
-            pointer-events: none;
-        }
-        
-        /* Aesthetic Ribbon Line */
-        .ribbon {
-            position: absolute;
-            top: 55%;
-            left: 0;
-            width: 100%;
-            height: 25px;
-            background: linear-gradient(to right, transparent, var(--wax-gold) 15%, #fff2ce 50%, var(--wax-gold) 85%, transparent);
-            opacity: 0.4;
-            z-index: 23;
+            background: var(--envelope-burgundy);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 50% 50%);
+            z-index: 20;
         }
 
         /* Aesthetic Wax Seal */
-        .seal {
+        .wax-seal {
             position: absolute;
-            top: 170px;
+            top: 180px;
             left: 50%;
             transform: translateX(-50%);
-            width: 85px;
-            height: 85px;
-            /* Irregular shape for realistic wax look */
-            border-radius: 50% 45% 55% 40% / 45% 55% 40% 55%;
-            background: radial-gradient(ellipse at center, var(--wax-gold) 0%, #c99c33 100%);
-            border: 3px solid #b38b2d;
-            z-index: 30;
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle at 30% 30%, #f1d382, var(--wax-gold));
+            border-radius: 50% 48% 52% 45% / 48% 52% 45% 50%; /* Organic shape */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.3);
+            z-index: 40;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Deep shadows for embossed look */
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.4), inset 0 -2px 5px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.3);
             font-family: 'Dancing Script', cursive;
-            color: #5d4037;
+            color: #5a3e12;
+            font-weight: bold;
             font-size: 1.4rem;
-            font-weight: 700;
-            text-shadow: 1px 1px 1px rgba(255,255,255,0.2);
-            transition: opacity 0.3s 0.2s;
+            transition: opacity 0.4s;
         }
 
-        .envelope-text {
+        .envelope-label {
             position: absolute;
-            bottom: 25px;
+            bottom: 30px;
             width: 100%;
             text-align: center;
             color: var(--wax-gold);
             font-family: 'Dancing Script', cursive;
             font-size: 2.2rem;
-            z-index: 30;
-            text-shadow: 0 2px 3px rgba(0,0,0,0.3);
+            z-index: 40;
+            letter-spacing: 1px;
         }
 
-        /* --- LETTER STYLES --- */
-        .letter-container {
+        /* --- THE LETTER --- */
+        .letter {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            /* Start small and hidden behind envelope */
-            transform: translate(-50%, -50%) scale(0.8);
-            width: 92%;
-            max-width: 1200px;
-            height: 88vh;
-            background: var(--paper-color);
-            /* Subtle paper texture */
-            background-image: linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url("https://www.transparenttextures.com/patterns/cream-paper.png");
+            width: 95%;
+            max-width: 1150px;
+            height: 85vh;
+            background: var(--ivory-paper);
+            background-image: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
             display: flex;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+            z-index: 5;
             opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
             visibility: hidden;
-            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1); /* Pop open effect */
-            z-index: 10;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
+            border: 1px solid #d1d1d1;
         }
 
-        /* BIGGER Photo Column */
-        .photo-column {
-            flex: 0 0 400px; /* Increased width from 300px */
-            background: #f8f8f2;
-            border-right: 1px solid #eee;
+        /* BIGGER Picture Frames */
+        .photo-sidebar {
+            flex: 0 0 450px; /* Increased Sidebar width */
+            background: #fdfaf7;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px;
             gap: 40px;
-            box-shadow: inset -5px 0 20px rgba(0,0,0,0.02);
+            padding: 20px;
+            border-right: 1px solid #eee;
         }
 
-        .text-column {
+        .polaroid-frame {
+            background: white;
+            padding: 18px 18px 50px 18px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            border: 1px solid #f0f0f0;
+            transition: transform 0.4s;
+        }
+
+        .polaroid-frame:nth-child(1) { transform: rotate(-3deg); }
+        .polaroid-frame:nth-child(2) { transform: rotate(4deg); }
+
+        .polaroid-frame img {
+            width: 320px; /* Big photo size */
+            height: 380px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Letter Text */
+        .letter-body {
             flex: 1;
             padding: 60px 80px;
             overflow-y: auto;
-        }
-
-        /* BIGGER Polaroids */
-        .polaroid {
-            background: white;
-            padding: 15px 15px 40px 15px; /* More padding for bigger frame */
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-            transform: rotate(-3deg);
-            border: 1px solid #e8e8e8;
-            transition: transform 0.3s;
-        }
-        .polaroid:hover { transform: rotate(0deg) scale(1.02); }
-        .polaroid:nth-child(2) { transform: rotate(4deg); }
-        .polaroid:nth-child(2):hover { transform: rotate(0deg) scale(1.02); }
-
-        .polaroid img {
-            width: 260px; /* Much bigger width */
-            height: 320px; /* Much bigger height */
-            object-fit: cover;
-            filter: sepia(10%); /* Slight vintage warmth */
-        }
-
-        .letter-text {
-            color: var(--text-main);
-            line-height: 1.9;
+            color: #333;
+            line-height: 1.8;
             font-size: 1.15rem;
         }
 
-        h2 {
+        .letter-body h2 {
             font-family: 'Playfair Display', serif;
-            color: var(--accent);
-            font-size: 2.5rem;
+            font-size: 2.6rem;
+            color: var(--envelope-burgundy);
             margin-bottom: 30px;
-            border-bottom: 2px solid rgba(138, 28, 51, 0.1);
-            padding-bottom: 15px;
-            display: inline-block;
         }
 
-        .bengali {
-            font-family: 'Lora', serif;
+        .bengali-section {
+            margin-top: 40px;
+            padding: 25px;
+            background: #fff5f6;
+            border-left: 5px solid var(--envelope-burgundy);
             font-size: 1.3rem;
-            color: var(--accent);
-            font-weight: bold;
-            background: rgba(138, 28, 51, 0.05);
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 40px;
-            border-left: 4px solid var(--accent);
+            font-weight: 600;
+            color: var(--envelope-burgundy);
         }
 
-        .sig {
+        .signature {
             text-align: right;
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.8rem;
-            color: var(--accent);
             margin-top: 40px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--envelope-burgundy);
         }
 
-        /* --- OPEN STATE ANIMATIONS --- */
-        .open .envelope-wrapper::before {
-            transform: rotateX(180deg); /* Flap opens */
+        /* --- OPENING LOGIC --- */
+        .scene.open .flap {
+            transform: rotateX(180deg);
+            z-index: 5; /* Moves behind the letter */
+        }
+
+        .scene.open .wax-seal {
+            opacity: 0;
+        }
+
+        .scene.open .envelope-wrapper {
+            transform: translateY(35%) scale(0.7); /* Envelope sinks to bottom but stays visible */
             z-index: 1;
         }
 
-        .open .seal, .
+        .scene.open .letter {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            z-index: 100; /* Letter comes to the very front */
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 1024px) {
+            .letter { flex-direction: column; overflow-y: auto; height: 95vh; }
+            .photo-sidebar { flex: none; width: 100%; flex-direction: row; height: auto; padding: 20px; }
+            .polaroid-frame img { width: 160px; height: 200px; }
+            .envelope-wrapper { width: 90%; height: 300px; }
+            .flap, .pocket { border-left-width: 45vw; border-right-width: 45vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scene" id="scene">
+        <div class="envelope-wrapper" onclick="openPage()">
+            <div class="flap"></div>
+            <div class="pocket"></div>
+            <div class="pocket-sides"></div>
+            <div class="wax-seal">P & S</div>
+            <div class="envelope-label">Happy Birthday Love</div>
+        </div>
+
+        <div class="letter">
+            <div class="photo-sidebar">
+                <div class="polaroid-frame">
+                    <img src="https://via.placeholder.com/320x380?text=Photo+1" alt="Shawmava">
+                </div>
+                <div class="polaroid-frame">
+                    <img src="https://via.placeholder.com/320x380?text=Photo+2" alt="Shawmava">
+                </div>
+            </div>
+
+            <div class="letter-body">
+                <h2>My beloved Shawmava,</h2>
+                
+                <p>Now I know why you were born in January, because you mark the beginning. Just how after a year’s tiredness, gloom, sufferings are borne with the hope of January. That Jan would bring something new, something different. That is YOU. You are the Start, You are THE fresh beginning that washes away all the darkness of the previous year.</p>
+
+                <p>As if there was nothing before you.</p>
+
+                <p>That is how you are in my life. It has always been you, even before I met you, and there will always be only you.</p>
+
+                <p>Yes, birthdays are gloomy, but before meeting you all my days were like that. I never really looked forward to anything.</p>
+
+                <p>Now everyday, I look forward to your messages, your calls, your voice. And most importantly, a life with you.</p>
+
+                <p>So before you say, ‘I don’t do anything for you Pratyasha’ - just remember that you have given meaning to each day of my life, you make me want to live. And by ‘live’ I don't mean just breathing and going about my day. ‘Living’ where I love, I fight, I cry, I get angry, I smile like a fool, I rrrrrrebel - I FEEL emotions.</p>
+
+                <p>I hate men, you know that, maybe not the best thing to hear about your gender on your birthday, but I do. Which is why, I never wanted to have a boy child, I always wanted a baby girl. I did not know how to raise a boy to be a good man, because I did not know good men. But seeing you knowing you, I will be over the moon to have and raise a baby boy with you, given that your behavior and face card (uff so hot) are the dominant genes.</p>
+
+                <p>And just like you, I hated to grow old, I was terrified of it, but now I look forward to it. Because I know it will take me closer to the life I envision with you.</p>
+
+                <p>Most things in my life that are hopeful are because of YOU.</p>
+
+                <p>Thank you for being you, thank you for being mine. I am so grateful to this day, when my soulmate was born.</p>
+
+                <p>Happy birthday Love, may Kanha bless every day of yours with all that is good.</p>
+
+                <div class="bengali-section">
+                    আজ থেকে আপনি আমার permanantly তুমি, জন্মদিনের অনেক অনেক শুভেচ্ছা প্রিয়, খুব খুব ভালো থেকো আর ভালো রেখো
+                </div>
+
+                <div class="signature">
+                    Yours Forever,<br>
+                    Pratyasha
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPage() {
+            document.getElementById('scene').classList.add('open');
+        }
+    </script>
+</body>
+</html>
