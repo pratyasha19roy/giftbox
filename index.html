@@ -3,225 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Shawmava | Happy Birthday</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>A Special Gift For You ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fcf8f8;
-            --envelope-burgundy: #7d1a2c;
-            --envelope-light: #962136;
-            --wax-gold: #d4af37;
-            --ivory-paper: #ffffff;
-            --text-main: #2c2c2c;
-            --sidebar-accent: #f8e8ea;
+            --primary-pink: #ff4d6d;
+            --dark-pink: #c9184a;
+            --bg-color: #fff0f3;
         }
-
-        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             padding: 0;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
-            font-family: 'Lora', serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            text-align: center;
         }
 
-        .scene {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1500px;
-        }
-
-        /* --- ENVELOPE --- */
-        .envelope-wrapper {
-            position: relative;
-            width: 550px;
-            height: 380px;
-            background: var(--envelope-burgundy);
-            border-radius: 4px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-            cursor: pointer;
-            z-index: 50;
-            transition: all 0.8s ease;
-        }
-
-        .envelope-wrapper::after {
-            content: ""; position: absolute; top:0; left:0; width:100%; height:100%;
-            background-image: url("https://www.transparenttextures.com/patterns/felt.png");
-            opacity: 0.15; pointer-events: none;
-        }
-
-        .flap {
-            position: absolute; top: 0; width: 0; height: 0;
-            border-top: 200px solid var(--envelope-light);
-            border-left: 275px solid transparent; border-right: 275px solid transparent;
-            transform-origin: top; transition: transform 0.6s ease; z-index: 60;
-        }
-
-        .pocket {
-            position: absolute; bottom: 0; width: 0; height: 0;
-            border-bottom: 200px solid var(--envelope-light);
-            border-left: 275px solid transparent; border-right: 275px solid transparent;
-            z-index: 55;
-        }
-
-        .wax-seal {
-            position: absolute; top: 170px; left: 50%; transform: translateX(-50%);
-            width: 80px; height: 80px;
-            background: radial-gradient(circle at 30% 30%, #f1d382, var(--wax-gold));
-            border-radius: 50% 45% 52% 48%;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-            z-index: 70; display: flex; justify-content: center; align-items: center;
-            font-family: 'Dancing Script', cursive; color: #5a3e12; font-weight: bold;
-            transition: opacity 0.4s;
-        }
-
-        .envelope-label {
-            position: absolute; bottom: 30px; width: 100%; text-align: center;
-            color: var(--wax-gold); font-family: 'Dancing Script', cursive;
-            font-size: 2rem; z-index: 70;
-        }
-
-        /* --- THE LETTER --- */
-        .letter {
-            position: absolute;
-            width: 85%;
-            max-width: 1000px;
-            height: 85vh;
-            background: var(--ivory-paper);
-            box-shadow: 0 0 50px rgba(0,0,0,0.1);
-            display: flex;
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
-            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-            visibility: hidden;
+        /* Lock Screen Styles */
+        #lock-screen {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             z-index: 10;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
+            max-width: 350px;
+            width: 90%;
         }
 
-        /* Left Side: Solid Accent Panel */
-        .sidebar-accent {
-            flex: 0 0 15%; 
-            background-color: var(--sidebar-accent);
-            border-right: 1px solid #eee;
+        h1 { font-family: 'Pacifico', cursive; color: var(--primary-pink); }
+
+        .passcode-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 24px;
+            letter-spacing: 5px;
+            border: 2px solid #ffccd5;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            outline: none;
         }
 
-        /* Right Side: Text Content */
-        .letter-body {
-            flex: 1;
-            padding: 60px 80px;
-            overflow-y: auto;
-            color: var(--text-main);
-            line-height: 1.8;
-            font-size: 1.15rem;
-            background-image: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
-        }
-
-        .letter-body h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--envelope-burgundy);
-            margin-top: 0;
-            margin-bottom: 30px;
-        }
-
-        .bengali-section {
-            margin-top: 40px;
-            padding: 25px;
-            background: rgba(125, 26, 44, 0.04);
-            border-left: 4px solid var(--envelope-burgundy);
-            font-size: 1.3rem;
+        .btn {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
             font-weight: 600;
-            color: #333;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .signature {
-            text-align: right;
-            margin-top: 50px;
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            color: var(--envelope-burgundy);
+        .btn:hover { background-color: var(--dark-pink); transform: scale(1.05); }
+
+        /* Secret Content Styles (Hidden initially) */
+        #content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* --- ANIMATION --- */
-        .scene.open .flap { transform: rotateX(180deg); z-index: 5; }
-        .scene.open .wax-seal, .scene.open .envelope-label { opacity: 0; pointer-events: none; }
-        .scene.open .envelope-wrapper { transform: translateY(100%) scale(0.6); opacity: 0; pointer-events: none; }
-        .scene.open .letter { opacity: 1; visibility: visible; transform: translateY(0) scale(1); z-index: 100; }
+        .message-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid var(--primary-pink);
+            position: relative;
+            animation: fadeIn 2s ease-in;
+        }
 
-        /* Mobile Adjustments */
-        @media (max-width: 900px) {
-            .letter { flex-direction: column; width: 95%; height: 90vh; }
-            .sidebar-accent { flex: none; width: 100%; height: 15px; border-right: none; border-bottom: 1px solid #eee; }
-            .letter-body { padding: 30px; }
-            .envelope-wrapper { width: 90%; height: 280px; }
-            .flap, .pocket { border-left-width: 45vw; border-right-width: 45vw; }
-            .letter-body h2 { font-size: 2rem; }
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            color: var(--primary-pink);
+            font-size: 20px;
+            animation: float 5s linear infinite;
+            bottom: -50px;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="scene" id="scene">
-        <div class="envelope-wrapper" onclick="openLetter()">
-            <div class="flap"></div>
-            <div class="pocket"></div>
-            <div class="wax-seal">P & S</div>
-            <div class="envelope-label">Happy Birthday Love</div>
-        </div>
+    <div id="lock-screen">
+        <h1>The Vault ❤️</h1>
+        <p>Enter our special date to unlock your gift</p>
+        <p><small>(Hint: 14022024)</small></p>
+        <input type="password" id="passcode" class="passcode-input" placeholder="DDMMYYYY" maxlength="8">
+        <br>
+        <button class="btn" onclick="checkCode()">UNLOCK GIFT</button>
+        <p id="error" style="color: red; display: none; margin-top: 10px;">Incorrect Date! Try again.</p>
+    </div>
 
-        <div class="letter">
-            <div class="sidebar-accent"></div>
-            <div class="letter-body">
-                <h2>My beloved Shawmava,</h2>
-                
-                <p>Now I know why you were born in January, because you mark the beginning. Just how after a year’s tiredness, gloom, sufferings are borne with the hope of January. That Jan would bring something new, something different. That is YOU. You are the Start, You are THE fresh beginning that washes away all the darkness of the previous year.</p>
-
-                <p>As if there was nothing before you.</p>
-
-                <p>That is how you are in my life. It has always been you, even before I met you, and there will always be only you.</p>
-
-                <p>Yes, birthdays are gloomy, but before meeting you all my days were like that. I never really looked forward to anything.</p>
-
-                <p>Now everyday, I look forward to your messages, your calls, your voice. And most importantly, a life with you.</p>
-
-                <p>So before you say, ‘I don’t do anything for you Pratyasha’ - just remember that you have given meaning to each day of my life, you make me want to live. And by ‘live’ I don't mean just breathing and going about my day. ‘Living’ where I love, I fight, I cry, I get angry, I smile like a fool, I rrrrrrebel - I FEEL emotions.</p>
-
-                <p>I hate men, you know that, maybe not the best thing to hear about your gender on your birthday, but I do. Which is why, I never wanted to have a boy child, I always wanted a baby girl. I did not know how to raise a boy to be a good man, because I did not know good men. But seeing you knowing you, I will be over the moon to have and raise a baby boy with you, given that your behavior and face card (uff so hot) are the dominant genes.</p>
-
-                <p>And just like you, I hated to grow old, I was terrified of it, but now I look forward to it. Because I know it will take me closer to the life I envision with you.</p>
-
-                <p>Most things in my life that are hopeful are because of YOU.</p>
-
-                <p>Thank you for being you, thank you for being mine. I am so grateful to this day, when my soulmate was born.</p>
-
-                <p>Happy birthday Love, may Kanha bless every day of yours with all that is good.</p>
-
-                <div class="bengali-section">
-                    আজ থেকে আপনি আমার permanantly তুমি, জন্মদিনের অনেক অনেক শুভেচ্ছা প্রিয়, খুব খুব ভালো থেকো আর ভালো রেখো
-                </div>
-
-                <div class="signature">
-                    Yours Forever,<br>
-                    Pratyasha
-                </div>
-            </div>
+    <div id="content">
+        <div class="message-box">
+            <h1>For Jenilia ❤️</h1>
+            <p>Every moment with you is like a beautiful dream come true.</p>
+            <p>Happy Valentine's Day!</p>
+            <p style="font-size: 50px;">🎁</p>
         </div>
     </div>
 
     <script>
-        function openLetter() {
-            document.getElementById('scene').classList.add('open');
+        function checkCode() {
+            const code = document.getElementById('passcode').value;
+            // The secret code from the original URL demo
+            if (code === "14022024") {
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('content').style.display = 'flex';
+                startHearts();
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        function startHearts() {
+            setInterval(createHeart, 300);
         }
     </script>
 </body>
