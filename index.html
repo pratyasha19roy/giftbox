@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Holi My Love</title>
     <style>
-        /* This section handles the look and the colors */
         body {
             margin: 0;
             padding: 0;
@@ -13,35 +12,55 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(45deg, #fff5f8, #f0f4ff);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #fff5f8, #f0e6ff);
+            font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
             text-align: center;
         }
 
         .message-card {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             z-index: 10;
-            border: 2px solid #ff80ab;
+            border: 3px solid #ff80ab;
+            position: relative;
         }
 
         h1 {
             color: #d81b60;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
             animation: pulse 2s infinite;
         }
 
         p {
             color: #6a1b9a;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
         }
 
-        /* This creates the floating heart effect */
+        /* Music Button Styling */
+        #music-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff80ab;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 128, 171, 0.4);
+            transition: 0.3s;
+        }
+
+        #music-btn:hover {
+            background-color: #d81b60;
+            transform: scale(1.1);
+        }
+
+        /* Floating Heart Styling */
         .heart {
             position: absolute;
             bottom: -10%;
@@ -52,57 +71,61 @@
         }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-110vh) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
+    <audio id="myAudio" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/04/And-So-It-Begins-Inspired-By-Crush-Music.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="message-card">
         <h1>Happy Holi, My Love! 🎨</h1>
         <p>Thank you for filling my life with colours.</p>
+        <button id="music-btn" onclick="toggleMusic()">Click for Music 🎵</button>
     </div>
 
     <script>
-        // This section creates the flying hearts automatically
+        // Music Play/Pause Function
+        const audio = document.getElementById("myAudio");
+        const btn = document.getElementById("music-btn");
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = "Pause Music ⏸";
+            } else {
+                audio.pause();
+                btn.innerHTML = "Play Music 🎵";
+            }
+        }
+
+        // Heart Animation Logic
         const colors = ['#FF1493', '#FF4500', '#FFD700', '#32CD32', '#00BFFF', '#FF69B4', '#8A2BE2'];
         
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            
-            // Randomly pick a color and position
             heart.innerHTML = '❤'; 
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.color = colors[Math.floor(Math.random() * colors.length)];
             heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
             
-            // Random speed for each heart
             const duration = Math.random() * 3 + 3;
             heart.style.animationDuration = duration + 's';
             
             document.body.appendChild(heart);
-
-            // Clean up the heart after it leaves the screen
-            setTimeout(() => {
-                heart.remove();
-            }, duration * 1000);
+            setTimeout(() => { heart.remove(); }, duration * 1000);
         }
 
-        // Generate a new heart every 300 milliseconds
         setInterval(createHeart, 300);
     </script>
 </body>
