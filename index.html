@@ -13,7 +13,7 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(45deg, #fff5f8, #f0e6ff);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             overflow: hidden;
             text-align: center;
         }
@@ -25,42 +25,44 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             z-index: 10;
             border: 3px solid #ff80ab;
-            position: relative;
+            max-width: 80%;
         }
 
         h1 {
             color: #d81b60;
-            font-size: 2.8rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
             animation: pulse 2s infinite;
         }
 
         p {
             color: #6a1b9a;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
+            line-height: 1.5;
         }
 
-        /* Music Button Styling */
+        /* Music Button */
         #music-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
+            margin-top: 25px;
+            padding: 12px 25px;
             background-color: #ff80ab;
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 1rem;
             box-shadow: 0 4px 15px rgba(255, 128, 171, 0.4);
             transition: 0.3s;
         }
 
         #music-btn:hover {
             background-color: #d81b60;
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
-        /* Floating Heart Styling */
+        /* Heart Animation */
         .heart {
             position: absolute;
             bottom: -10%;
@@ -77,43 +79,48 @@
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.03); }
         }
     </style>
 </head>
 <body>
 
-    <audio id="myAudio" loop>
-        <source src="https://www.chosic.com/wp-content/uploads/2021/04/And-So-It-Begins-Inspired-By-Crush-Music.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+        <source src="https://pixabay.com/music/download/romantic-piano-110053.mp3" type="audio/mpeg">
     </audio>
 
     <div class="message-card">
         <h1>Happy Holi, My Love! 🎨</h1>
         <p>Thank you for filling my life with colours.</p>
-        <button id="music-btn" onclick="toggleMusic()">Click for Music 🎵</button>
+        <button id="music-btn" onclick="playMusic()">Tap for Music 🎵</button>
     </div>
 
     <script>
-        // Music Play/Pause Function
-        const audio = document.getElementById("myAudio");
-        const btn = document.getElementById("music-btn");
-
-        function toggleMusic() {
+        // Music Function
+        function playMusic() {
+            const audio = document.getElementById("bgMusic");
+            const btn = document.getElementById("music-btn");
+            
             if (audio.paused) {
-                audio.play();
-                btn.innerHTML = "Pause Music ⏸";
+                audio.play().catch(error => {
+                    console.log("Playback failed. Please try again.");
+                });
+                btn.innerHTML = "Music is Playing... ❤️";
+                btn.style.backgroundColor = "#6a1b9a";
             } else {
                 audio.pause();
-                btn.innerHTML = "Play Music 🎵";
+                btn.innerHTML = "Tap for Music 🎵";
+                btn.style.backgroundColor = "#ff80ab";
             }
         }
 
-        // Heart Animation Logic
+        // Heart Spawner
         const colors = ['#FF1493', '#FF4500', '#FFD700', '#32CD32', '#00BFFF', '#FF69B4', '#8A2BE2'];
         
         function createHeart() {
             const heart = document.createElement('div');
-            heart.classList.add('heart');
+            heart.className = 'heart';
             heart.innerHTML = '❤'; 
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.color = colors[Math.floor(Math.random() * colors.length)];
