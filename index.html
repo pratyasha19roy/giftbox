@@ -3,153 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Gift For You ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <title>Happy Holi My Love</title>
     <style>
-        :root {
-            --primary-pink: #ff4d6d;
-            --dark-pink: #c9184a;
-            --bg-color: #fff0f3;
-        }
-
+        /* This section handles the look and the colors */
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            background: linear-gradient(45deg, #fff5f8, #f0f4ff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
             text-align: center;
         }
 
-        /* Lock Screen Styles */
-        #lock-screen {
-            background: white;
+        .message-card {
+            background: rgba(255, 255, 255, 0.8);
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             z-index: 10;
-            max-width: 350px;
-            width: 90%;
+            border: 2px solid #ff80ab;
         }
 
-        h1 { font-family: 'Pacifico', cursive; color: var(--primary-pink); }
-
-        .passcode-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 24px;
-            letter-spacing: 5px;
-            border: 2px solid #ffccd5;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            outline: none;
+        h1 {
+            color: #d81b60;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
         }
 
-        .btn {
-            background-color: var(--primary-pink);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
+        p {
+            color: #6a1b9a;
+            font-size: 1.2rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
         }
 
-        .btn:hover { background-color: var(--dark-pink); transform: scale(1.05); }
-
-        /* Secret Content Styles (Hidden initially) */
-        #content {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .message-box {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            border: 2px solid var(--primary-pink);
-            position: relative;
-            animation: fadeIn 2s ease-in;
-        }
-
-        /* Floating Hearts Animation */
+        /* This creates the floating heart effect */
         .heart {
             position: absolute;
-            color: var(--primary-pink);
-            font-size: 20px;
-            animation: float 5s linear infinite;
-            bottom: -50px;
-            z-index: -1;
+            bottom: -10%;
+            font-size: 2rem;
+            user-select: none;
+            z-index: 1;
+            animation: floatUp 5s linear forwards;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen">
-        <h1>The Vault ❤️</h1>
-        <p>Enter our special date to unlock your gift</p>
-        <p><small>(Hint: 14022024)</small></p>
-        <input type="password" id="passcode" class="passcode-input" placeholder="DDMMYYYY" maxlength="8">
-        <br>
-        <button class="btn" onclick="checkCode()">UNLOCK GIFT</button>
-        <p id="error" style="color: red; display: none; margin-top: 10px;">Incorrect Date! Try again.</p>
-    </div>
-
-    <div id="content">
-        <div class="message-box">
-            <h1>For Jenilia ❤️</h1>
-            <p>Every moment with you is like a beautiful dream come true.</p>
-            <p>Happy Valentine's Day!</p>
-            <p style="font-size: 50px;">🎁</p>
-        </div>
+    <div class="message-card">
+        <h1>Happy Holi, My Love! 🎨</h1>
+        <p>Thank you for filling my life with colours.</p>
     </div>
 
     <script>
-        function checkCode() {
-            const code = document.getElementById('passcode').value;
-            // The secret code from the original URL demo
-            if (code === "14022024") {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('content').style.display = 'flex';
-                startHearts();
-            } else {
-                document.getElementById('error').style.display = 'block';
-            }
-        }
-
+        // This section creates the flying hearts automatically
+        const colors = ['#FF1493', '#FF4500', '#FFD700', '#32CD32', '#00BFFF', '#FF69B4', '#8A2BE2'];
+        
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerHTML = '❤️';
+            
+            // Randomly pick a color and position
+            heart.innerHTML = '❤'; 
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            
+            // Random speed for each heart
+            const duration = Math.random() * 3 + 3;
+            heart.style.animationDuration = duration + 's';
+            
             document.body.appendChild(heart);
 
+            // Clean up the heart after it leaves the screen
             setTimeout(() => {
                 heart.remove();
-            }, 5000);
+            }, duration * 1000);
         }
 
-        function startHearts() {
-            setInterval(createHeart, 300);
-        }
+        // Generate a new heart every 300 milliseconds
+        setInterval(createHeart, 300);
     </script>
 </body>
 </html>
